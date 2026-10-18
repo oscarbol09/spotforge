@@ -1,7 +1,7 @@
 """Unit and integration tests for the Copywriting service (Gemma)."""
 
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from app.config import Settings
 from app.prompts.ad_copywriter import (

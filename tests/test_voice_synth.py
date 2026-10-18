@@ -1,13 +1,11 @@
 """Unit and integration tests for the Voice Synthesis service (ElevenLabs)."""
 
 import pytest
-from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from app.config import Settings
 from app.services.voice_synth import (
     VoiceSynthService,
-    VoiceInfo,
     AudioFileResult,
     VoiceSynthesisError,
 )
