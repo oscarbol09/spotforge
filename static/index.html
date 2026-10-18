@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎙️ SpotForge — Generador de Cuñas Publicitarias con IA</title>
+  <meta name="description" content="Crea cuñas de audio publicitarias de 30 segundos para pequeños negocios con Google Gemma e ElevenLabs en segundos.">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
+
+  <!-- Header / Navbar -->
+  <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-xl shadow-lg shadow-purple-500/20">
+          🎙️
+        </div>
+        <div>
+          <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 bg-clip-text text-transparent">
+            SpotForge
+          </span>
+          <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-900/40 text-purple-300 border border-purple-700/50">
+            Open-Source AI Studio
+          </span>
+        </div>
+      </div>
+
+      <!-- Partner Badges -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Gemma 4
+        </span>
+        <span class="hidden md:inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">
+          ElevenLabs Studio
+        </span>
+        <a href="/docs" target="_blank" class="text-xs text-purple-400 hover:text-purple-300 transition-colors flex items-center gap-1">
+          API Docs ↗
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    <div class="text-center max-w-3xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold mb-3">
+        <span>🏆 Hacktoberfest 2026: Side Hustle Edition</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
+        Cuñas de Audio de 30 Segundos que <span class="bg-gradient-to-r from-amber-400 to-purple-400 bg-clip-text text-transparent">Venden de Verdad</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        Convierte 3 datos de cualquier negocio local en un spot publicitario con guión AIDA persuasivo y locución humana profesional en segundos.
+      </p>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="error-banner" class="hidden mb-6 max-w-4xl mx-auto p-4 rounded-xl bg-red-950/60 border border-red-800 text-red-200 text-sm flex items-start gap-3">
+      <span class="text-lg">⚠️</span>
+      <div class="flex-grow" id="error-message"></div>
+    </div>
+
+    <!-- Workspace Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Columna Izquierda: Formulario (7 columnas) -->
+      <div class="lg:col-span-7 space-y-6">
+        <form id="ad-form" class="glass-panel p-6 sm:p-8 rounded-2xl space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-purple-600/30 text-purple-400 text-xs flex items-center justify-center font-bold">1</span>
+              Datos del Negocio Local
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Gemma usará esta información para redactar el guión con la fórmula AIDA.</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="business_name" class="block text-xs font-semibold text-slate-300 mb-1">Nombre del Negocio *</label>
+              <input type="text" id="business_name" name="business_name" required placeholder="Ej: Pizzería Don Mario"
+                class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+            </div>
+            <div>
+              <label for="business_type" class="block text-xs font-semibold text-slate-300 mb-1">Giro / Tipo Comercial *</label>
+              <input type="text" id="business_type" name="business_type" required placeholder="Ej: Restaurante italiano, Barbería"
+                class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+            </div>
+          </div>
+
+          <div>
+            <label for="offer" class="block text-xs font-semibold text-slate-300 mb-1">Oferta Principal o Promoción *</label>
+            <textarea id="offer" name="offer" required rows="2" placeholder="Ej: 2x1 en pizzas familiares los martes y jueves con entrega a domicilio gratis"
+              class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"></textarea>
+          </div>
+
+          <div>
+            <label for="call_to_action" class="block text-xs font-semibold text-slate-300 mb-1">Llamada a la Acción (CTA) *</label>
+            <input type="text" id="call_to_action" name="call_to_action" required placeholder="Ej: Llama al 555-1234 o pide por WhatsApp hoy mismo"
+              class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+          </div>
+
+          <!-- Paso 2: Personalización de Producción -->
+          <div class="border-t border-slate-800 pt-6">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2 mb-4">
+              <span class="w-6 h-6 rounded-full bg-purple-600/30 text-purple-400 text-xs flex items-center justify-center font-bold">2</span>
+              Estilo y Producción
+            </h2>
+
+            <!-- Tono -->
+            <div class="mb-4">
+              <label class="block text-xs font-semibold text-slate-300 mb-2">Tono Comercial</label>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" class="tone-btn active px-3 py-1.5 rounded-lg border text-xs font-medium bg-purple-600 text-white border-purple-500 transition-all" data-tone="energético">
+                  ⚡ Energético
+                </button>
+                <button type="button" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="cálido">
+                  ☕ Cálido
+                </button>
+                <button type="button" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="profesional">
+                  💼 Profesional
+                </button>
+                <button type="button" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="divertido">
+                  🎉 Divertido
+                </button>
+                <button type="button" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="urgente">
+                  🔥 Urgente
+                </button>
+              </div>
+            </div>
+
+            <!-- Idioma & Duración -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-2">Idioma</label>
+                <div class="flex gap-4">
+                  <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-200">
+                    <input type="radio" name="language" value="es" checked class="text-purple-600 focus:ring-purple-500">
+                    <span>🇪🇸 Español</span>
+                  </label>
+                  <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-200">
+                    <input type="radio" name="language" value="en" class="text-purple-600 focus:ring-purple-500">
+                    <span>🇺🇸 English</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label for="duration_seconds" class="text-xs font-semibold text-slate-300">Duración Objetivo</label>
+                  <span id="duration-label" class="text-xs text-purple-400 font-mono font-medium">30s (~75 palabras)</span>
+                </div>
+                <input type="range" id="duration_seconds" name="duration_seconds" min="15" max="60" step="15" value="30"
+                  class="w-full accent-purple-500 bg-slate-800 rounded-lg cursor-pointer">
+              </div>
+            </div>
+
+            <!-- Locutor ElevenLabs -->
+            <div>
+              <label for="voice_id" class="block text-xs font-semibold text-slate-300 mb-1">Voz del Locutor (ElevenLabs)</label>
+              <select id="voice_id" name="voice_id"
+                class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all">
+                <option value="">Cargando catálogo de voces...</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="pt-2">
+            <button type="submit" id="generate-btn"
+              class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 transition-all transform active:scale-[0.99]">
+              <span>🎙️ Generar Cuña Publicitaria Completa</span>
+            </button>
+            <p class="text-center text-[11px] text-slate-500 mt-2">
+              Coste de tokens: <strong>$0 USD</strong> (Google Gemma 4 Open-Weights) • Síntesis en ~8-12 segundos
+            </p>
+          </div>
+        </form>
+      </div>
+
+      <!-- Columna Derecha: Resultado & Reproductor (5 columnas) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- Loading Indicator -->
+        <div id="loading-state" class="hidden glass-panel p-8 rounded-2xl text-center space-y-4">
+          <div class="sound-wave mb-4">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+          <p id="loading-text" class="text-sm font-medium text-purple-300 animate-pulse">
+            Gemma 4 redactando guión y ElevenLabs produciendo audio...
+          </p>
+          <p class="text-xs text-slate-500">
+            Optimizando ritmo de locución a ~2.5 palabras por segundo
+          </p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="glass-panel p-8 sm:p-12 rounded-2xl text-center space-y-4 border-dashed">
+          <div class="w-16 h-16 rounded-2xl bg-purple-950/50 border border-purple-800/40 text-purple-400 mx-auto flex items-center justify-center text-3xl">
+            📻
+          </div>
+          <h3 class="text-base font-bold text-slate-200">Tu Estudio de Audio Publicitario</h3>
+          <p class="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+            Ingresa los 3 datos de tu cliente a la izquierda. En segundos tendrás un spot de audio profesional con música de locución natural listo para pautar.
+          </p>
+          <div class="pt-4 flex justify-center gap-2 text-[11px] text-slate-400">
+            <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">Stories IG</span>
+            <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">TikTok Ads</span>
+            <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">Radio Local</span>
+          </div>
+        </div>
+
+        <!-- Result Card -->
+        <div id="result-card" class="hidden glass-panel p-6 sm:p-8 rounded-2xl space-y-6 glow-primary">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                Spot Generado con Éxito
+              </span>
+              <h3 class="text-base font-bold text-white mt-0.5">Vista Previa de Locución</h3>
+            </div>
+            <button id="copy-script-btn" class="text-xs text-slate-400 hover:text-white px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 transition-colors flex items-center gap-1">
+              <span>📋 Copiar</span>
+            </button>
+          </div>
+
+          <!-- Metrics Pills -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+              <span class="text-[10px] uppercase text-slate-400 font-semibold block">Duración</span>
+              <span id="metric-duration" class="text-xs font-bold text-white font-mono">--</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+              <span class="text-[10px] uppercase text-slate-400 font-semibold block">Palabras</span>
+              <span id="metric-words" class="text-xs font-bold text-white font-mono">--</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+              <span class="text-[10px] uppercase text-slate-400 font-semibold block">IA Copy</span>
+              <span id="metric-model" class="text-[11px] font-bold text-purple-300 truncate block">Gemma 4</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+              <span class="text-[10px] uppercase text-slate-400 font-semibold block">Voz</span>
+              <span id="metric-voice" class="text-[11px] font-bold text-amber-300 truncate block">Rachel</span>
+            </div>
+          </div>
+
+          <!-- Editable Script Output -->
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label for="script-output" class="text-xs font-semibold text-slate-300">
+                Guión Publicitario (Editable)
+              </label>
+              <span class="text-[11px] text-slate-500">Puedes retocarlo antes de regenerar</span>
+            </div>
+            <textarea id="script-output" rows="4"
+              class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3.5 text-sm text-slate-200 leading-relaxed focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all font-sans"></textarea>
+          </div>
+
+          <!-- Native Audio Player -->
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between text-xs text-slate-400">
+              <span class="font-medium text-slate-300">🎧 Reproductor de Audio HD</span>
+              <span class="text-[11px] text-purple-400">MP3 44.1kHz • 128kbps</span>
+            </div>
+            <audio id="audio-player" controls class="w-full h-10 rounded-lg">
+              Tu navegador no soporta el reproductor de audio.
+            </audio>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a id="download-btn" href="#" download="spot.mp3"
+              class="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all">
+              <span>📥 Descargar MP3 Broadcast</span>
+            </a>
+            <button id="regenerate-voice-btn"
+              class="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-all flex items-center justify-center gap-1.5">
+              <span>🔄 Sintetizar Cambios</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div>
+        <strong>SpotForge</strong> • Construido para el <span class="text-slate-300">Hacktoberfest 2026: Side Hustle Challenge</span>
+      </div>
+      <div class="flex items-center gap-4 text-slate-400">
+        <span>Google Gemma 4 Open-Weights</span>
+        <span>•</span>
+        <span>ElevenLabs API</span>
+        <span>•</span>
+        <span>FastAPI</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
