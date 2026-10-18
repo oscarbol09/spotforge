@@ -127,7 +127,7 @@ Key architectural choices are formally documented through ADRs:
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/your-username/spotforge.git
+git clone https://github.com/oscarbol09/spotforge.git
 cd spotforge
 ```
 

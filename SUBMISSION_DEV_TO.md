@@ -3,7 +3,7 @@ title: "SpotForge 🎙️: Turn 3 Local Business Facts into a Broadcast Audio Ad
 published: false
 description: "Turn 3 facts about any local store into a broadcast-ready 30-second audio ad with open-weights Gemma 4, text normalization, ElevenLabs studio voice, and FFmpeg music mixing in seconds."
 tags: devchallenge, hf26challenge, hacktoberfest, ai
-cover_image: https://raw.githubusercontent.com/your-username/spotforge/master/docs/cover.png
+cover_image: https://raw.githubusercontent.com/oscarbol09/spotforge/master/docs/cover.png
 ---
 
 *This is a submission for the [Hacktoberfest Open-Source AI Challenge Week 2: Side Hustle](https://dev.to/challenges/hacktoberfest-week2-2026-10-12)*
@@ -45,9 +45,9 @@ Here are three authentic commercial spots generated end-to-end by SpotForge:
 
 | Client Business | Commercial Category | Voice Talent | Background Music | Real Duration | Audio File |
 |---|---|---|---|---|---|
-| **Pizzería Don Mario** | Wood-fired artisanal Italian pizzeria | Rachel | ⚡ Upbeat Commercial (110 BPM) | **28.4s** | [`demo_pizzeria.mp3`](https://github.com/your-username/spotforge/raw/master/static/audio/demo_pizzeria.mp3) |
-| **Barbería El Bigote** | Classic executive men's grooming & hot towel | Antoni | 🔥 Urban Energy (120 BPM) | **35.0s** | [`demo_barber.mp3`](https://github.com/your-username/spotforge/raw/master/static/audio/demo_barber.mp3) |
-| **Apex Auto Repair** | Multi-brand automotive mechanics & brake service | Adam | ☕ Chill Acoustic (75 BPM) | **36.8s** | [`demo_autorepair.mp3`](https://github.com/your-username/spotforge/raw/master/static/audio/demo_autorepair.mp3) |
+| **Pizzería Don Mario** | Wood-fired artisanal Italian pizzeria | Rachel | ⚡ Upbeat Commercial (110 BPM) | **28.4s** | [`demo_pizzeria.mp3`](https://github.com/oscarbol09/spotforge/raw/master/static/audio/demo_pizzeria.mp3) |
+| **Barbería El Bigote** | Classic executive men's grooming & hot towel | Antoni | 🔥 Urban Energy (120 BPM) | **35.0s** | [`demo_barber.mp3`](https://github.com/oscarbol09/spotforge/raw/master/static/audio/demo_barber.mp3) |
+| **Apex Auto Repair** | Multi-brand automotive mechanics & brake service | Adam | ☕ Chill Acoustic (75 BPM) | **36.8s** | [`demo_autorepair.mp3`](https://github.com/oscarbol09/spotforge/raw/master/static/audio/demo_autorepair.mp3) |
 
 ### Transcripts Generated Live by Gemma 4:
 
@@ -88,7 +88,7 @@ Many AI projects claim "$0 cost forever" by glossing over commercial licensing r
 
 The entire codebase is open-source under the MIT License:
 
-{% github your-username/spotforge %}
+{% github oscarbol09/spotforge %}
 
 - **Full FastAPI Backend**: Modular routers, Pydantic v2 validation, and async streaming.
 - **Copywriter Engine**: Single-prompt Gemma 4 integration with thinking-tokens extraction.
