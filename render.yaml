@@ -12,7 +12,7 @@ services:
       - key: ELEVENLABS_API_KEY
         sync: false
       - key: GEMMA_MODEL_ID
-        value: gemma-3-27b-it
+        value: gemma-4-26b-a4b-it
       - key: DEFAULT_VOICE_ID
         value: JBFqnCBsd6RMkjVDRZzb
       - key: DEFAULT_LANGUAGE
