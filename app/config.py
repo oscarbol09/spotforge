@@ -12,12 +12,18 @@ class Settings(BaseSettings):
     elevenlabs_api_key: str = ""
     gemma_model_id: str = "gemma-4-26b-a4b-it"
     fallback_model_id: str = "gemma-4-31b-it"
+    llm_backend: str = "gemini"  # gemini | ollama
+    ollama_base_url: str = "http://localhost:11434"
+    elevenlabs_model: str = "eleven_multilingual_v2"
     default_voice_id: str = "JBFqnCBsd6RMkjVDRZzb"  # Rachel
     default_language: str = "es"
     port: int = 8000
     host: str = "0.0.0.0"
     environment: str = "development"
     audio_output_dir: str = "static/audio"
+    music_dir: str = "static/music"
+    audio_ttl_hours: int = 24
+    enable_music_mixing: bool = True
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -28,6 +34,12 @@ class Settings(BaseSettings):
     def get_audio_dir(self) -> Path:
         """Ensure audio output directory exists and return Path object."""
         path = Path(self.audio_output_dir)
+        path.mkdir(parents=True, exist_ok=True)
+        return path
+
+    def get_music_dir(self) -> Path:
+        """Ensure background music directory exists and return Path object."""
+        path = Path(self.music_dir)
         path.mkdir(parents=True, exist_ok=True)
         return path
 

@@ -21,8 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const metricDuration = document.getElementById("metric-duration");
   const metricWords = document.getElementById("metric-words");
-  const metricModel = document.getElementById("metric-model");
+  const metricChars = document.getElementById("metric-chars");
   const metricVoice = document.getElementById("metric-voice");
+  const musicSelect = document.getElementById("music_track");
+  const resultWarnings = document.getElementById("result-warnings");
 
   let currentSpotData = null;
 
@@ -79,6 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     hideError();
 
+    const selectedTrack = musicSelect ? musicSelect.value : "upbeat_commercial";
+    const useMusic = selectedTrack !== "none";
+
     const payload = {
       business_name: document.getElementById("business_name").value.trim(),
       business_type: document.getElementById("business_type").value.trim(),
@@ -88,6 +93,8 @@ document.addEventListener("DOMContentLoaded", () => {
       language: document.querySelector('input[name="language"]:checked')?.value || "es",
       duration_seconds: parseInt(durationSlider.value, 10),
       voice_id: voiceSelect.value || null,
+      music: useMusic,
+      music_track: useMusic ? selectedTrack : null,
     };
 
     if (!payload.business_name || !payload.offer || !payload.call_to_action) {
@@ -95,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    startLoading("Gemma 4 redactando guión persuasivo y ElevenLabs produciendo audio...");
+    startLoading("Gemma redactando guión, normalizando texto y ElevenLabs produciendo audio con música...");
 
     try {
       const res = await fetch("/api/generate", {
@@ -127,7 +134,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    startLoading("ElevenLabs sintetizando audio con el guión editado...");
+    const selectedTrack = musicSelect ? musicSelect.value : "upbeat_commercial";
+    const useMusic = selectedTrack !== "none";
+
+    startLoading("ElevenLabs sintetizando audio con el guión editado y mezclando...");
 
     const payload = {
       business_name: document.getElementById("business_name").value.trim() || "Spot Personalizado",
@@ -138,6 +148,8 @@ document.addEventListener("DOMContentLoaded", () => {
       voice_id: voiceSelect.value || null,
       language: document.querySelector('input[name="language"]:checked')?.value || "es",
       duration_seconds: parseInt(durationSlider.value, 10),
+      music: useMusic,
+      music_track: useMusic ? selectedTrack : null,
     };
 
     try {
@@ -184,8 +196,23 @@ document.addEventListener("DOMContentLoaded", () => {
     scriptTextarea.value = data.script;
     metricDuration.textContent = `${data.duration_seconds}s`;
     metricWords.textContent = `${data.word_count} palabras`;
-    metricModel.textContent = data.model_used;
-    metricVoice.textContent = voiceSelect.options[voiceSelect.selectedIndex]?.text.split("—")[0].trim() || data.voice_used;
+    if (metricChars) {
+      metricChars.textContent = data.characters_used ? `${data.characters_used}` : "--";
+    }
+    metricVoice.textContent = data.voice_used || voiceSelect.options[voiceSelect.selectedIndex]?.text.split("—")[0].trim() || "Locutor";
+
+    // Handle warnings if present
+    if (resultWarnings) {
+      if (data.warnings && data.warnings.length > 0) {
+        resultWarnings.innerHTML = data.warnings
+          .map((w) => `<div class="flex items-center gap-1.5"><span>⚠️</span><span>${escapeHtml(w)}</span></div>`)
+          .join("");
+        resultWarnings.classList.remove("hidden");
+      } else {
+        resultWarnings.classList.add("hidden");
+        resultWarnings.innerHTML = "";
+      }
+    }
 
     audioPlayer.src = data.audio_url;
     audioPlayer.load();
@@ -195,6 +222,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     downloadBtn.href = data.audio_url;
     downloadBtn.setAttribute("download", `${data.id}.mp3`);
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
   }
 
   function startLoading(message) {

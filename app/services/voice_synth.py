@@ -38,6 +38,8 @@ class AudioFileResult:
     relative_url: str
     voice_id: str
     file_size_bytes: int
+    characters_used: int = 0
+    voice_name: str = ""
 
 
 # Curated commercial voices with proven high conversion for radio and digital ads
@@ -123,30 +125,14 @@ class VoiceSynthService:
         output_filename: str | None = None,
         stability: float = 0.45,
         similarity_boost: float = 0.75,
-        model_id: str = "eleven_multilingual_v2",
+        model_id: str | None = None,
     ) -> AudioFileResult:
-        """Synthesize text into a broadcast-ready MP3 file.
-
-        Args:
-            text: Ad copy text to be spoken.
-            voice_id: ElevenLabs voice ID (falls back to default).
-            output_filename: Optional filename (generates random UUID if omitted).
-            stability: Voice stability (lower = more emotional/commercial dynamism).
-            similarity_boost: Voice clarity and speaker match boost.
-            model_id: Model to use (eleven_multilingual_v2 recommended for highest quality).
-
-        Returns:
-            AudioFileResult with file path, url, and size.
-
-        Raises:
-            ValueError: If input text is empty.
-            VoiceSynthesisError: If ElevenLabs API returns an error.
-        """
         clean_text = text.strip()
         if not clean_text:
             raise ValueError("El texto para síntesis no puede estar vacío.")
 
         target_voice = voice_id or self.settings.default_voice_id
+        target_model = model_id or self.settings.elevenlabs_model
 
         if not output_filename:
             output_filename = f"spot_{uuid.uuid4().hex[:12]}.mp3"
@@ -155,11 +141,11 @@ class VoiceSynthService:
         target_path = out_dir / output_filename
 
         try:
-            logger.info("Synthesizing speech with voice %s (model: %s)", target_voice, model_id)
+            logger.info("Synthesizing speech with voice %s (model: %s)", target_voice, target_model)
             audio_stream = self._client.text_to_speech.convert(
                 voice_id=target_voice,
                 text=clean_text,
-                model_id=model_id,
+                model_id=target_model,
                 output_format="mp3_44100_128",
                 voice_settings=VoiceSettings(
                     stability=stability,
@@ -180,17 +166,25 @@ class VoiceSynthService:
 
             relative_url = f"/audio/{output_filename}"
 
+            # Attempt to resolve human-readable voice name
+            voice_name = target_voice
+            for v in self.list_voices():
+                if v.voice_id == target_voice:
+                    voice_name = v.name
+                    break
+
             return AudioFileResult(
                 file_path=target_path,
                 filename=output_filename,
                 relative_url=relative_url,
                 voice_id=target_voice,
                 file_size_bytes=total_bytes,
+                characters_used=len(clean_text),
+                voice_name=voice_name,
             )
 
         except Exception as exc:
             logger.error("ElevenLabs speech synthesis failed: %s", exc)
-            # Remove partial or corrupt file if created
             if target_path.exists():
                 try:
                     target_path.unlink()

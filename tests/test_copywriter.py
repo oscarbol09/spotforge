@@ -1,4 +1,4 @@
-"""Unit and integration tests for the Copywriting service (Gemma)."""
+"""Unit and integration tests for the Copywriting service (Gemma v2)."""
 
 import pytest
 from unittest.mock import MagicMock
@@ -8,6 +8,7 @@ from app.prompts.ad_copywriter import (
     calculate_target_words,
     calculate_estimated_duration,
     build_prompts,
+    build_unified_prompt,
 )
 from app.services.copywriter import (
     CopywriterService,
@@ -41,10 +42,21 @@ def test_build_prompts_contains_required_fields():
         language="es",
         duration_seconds=30,
     )
-    assert "AIDA" in sys_prompt
+    assert "AIDA" in user_prompt
     assert "Tacos Don Pepe" in user_prompt
     assert "3x2 en tacos al pastor" in user_prompt
     assert "Pide por WhatsApp al 555-0199" in user_prompt
+
+
+def test_build_unified_prompt():
+    prompt = build_unified_prompt(
+        business_name="Tacos Don Pepe",
+        business_type="taquería",
+        offer="3x2 en tacos al pastor",
+        call_to_action="Pide por WhatsApp al 555-0199",
+    )
+    assert "AIDA" in prompt
+    assert "Tacos Don Pepe" in prompt
 
 
 # 2. Sanitization tests
@@ -65,14 +77,14 @@ def test_clean_script_removes_markdown_and_cues():
 
 # 3. Service initialization & error handling
 def test_service_raises_on_missing_api_key():
-    settings = Settings(gemini_api_key="")
+    settings = Settings(gemini_api_key="", llm_backend="gemini")
     with pytest.raises(ValueError, match="GEMINI_API_KEY no está configurada"):
         CopywriterService(settings=settings)
 
 
 # 4. Mocked generation tests
 def test_generate_script_successful():
-    settings = Settings(gemini_api_key="fake-test-key")
+    settings = Settings(gemini_api_key="fake-test-key", llm_backend="gemini")
     service = CopywriterService(settings=settings)
 
     mock_client = MagicMock()
@@ -84,7 +96,7 @@ def test_generate_script_successful():
         "directamente a nuestro WhatsApp. Tacos Don Pepe, tu mejor opción gastronómica."
     )
     mock_client.models.generate_content.return_value = mock_response
-    service._client = mock_client
+    service.backend._client = mock_client
 
     result = service.generate_script(
         business_name="Tacos Don Pepe",
@@ -108,18 +120,18 @@ def test_generate_script_fallback_on_primary_model_error():
         gemini_api_key="fake-test-key",
         gemma_model_id="gemma-3-27b-it",
         fallback_model_id="gemma-2-9b-it",
+        llm_backend="gemini",
     )
     service = CopywriterService(settings=settings)
 
     mock_client = MagicMock()
-    # First call fails, second call succeeds
     mock_success_response = MagicMock()
     mock_success_response.text = "Guión generado con éxito por el modelo de respaldo."
     mock_client.models.generate_content.side_effect = [
         Exception("Model overloaded"),
         mock_success_response,
     ]
-    service._client = mock_client
+    service.backend._client = mock_client
 
     result = service.generate_script(
         business_name="AutoLavado Express",

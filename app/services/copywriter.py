@@ -1,14 +1,15 @@
-"""Copywriting service powered by Google Gemma open-weight models."""
+"""Copywriting service supporting interchangeable LLM backends (Gemini API & local Ollama)."""
 
 import logging
 import re
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from google import genai
-from google.genai import types
+import httpx
 
 from app.config import Settings, get_settings
 from app.prompts.ad_copywriter import (
-    build_prompts,
+    build_unified_prompt,
     calculate_estimated_duration,
 )
 
@@ -67,7 +68,7 @@ def clean_script(text: str) -> str:
     # Remove speaker prefixes like "Locutor:", "Narrador:"
     cleaned = re.sub(r"^(Locutor|Narrador|Voz|Voice):\s*", "", cleaned, flags=re.IGNORECASE | re.MULTILINE)
 
-    # Normalize double quotes and weird formatting
+    # Normalize double quotes and apostrophes
     cleaned = cleaned.replace('"', "").replace("'", "")
 
     # Normalize whitespace and newlines into single spaces
@@ -78,19 +79,101 @@ def clean_script(text: str) -> str:
     return cleaned
 
 
-class CopywriterService:
-    """Service to generate professional audio ad scripts using Gemma models."""
+class BaseLLMBackend(ABC):
+    """Abstract interface for LLM backends (Gemini API vs Ollama local)."""
 
-    def __init__(self, settings: Settings | None = None) -> None:
-        self.settings = settings or get_settings()
+    @abstractmethod
+    def generate(self, prompt: str, model_id: str, fallback_model_id: str | None = None) -> tuple[str, str]:
+        """Generate text from prompt.
 
-        if not self.settings.gemini_api_key:
+        Returns:
+            tuple[str, str]: (raw_text, actual_model_used)
+        """
+        pass
+
+
+class GeminiBackend(BaseLLMBackend):
+    """Google AI Studio / Gemini API backend for Gemma open-weight models."""
+
+    def __init__(self, api_key: str) -> None:
+        if not api_key:
             raise ValueError(
                 "GEMINI_API_KEY no está configurada. "
                 "Obtén una clave gratuita en https://aistudio.google.com/ e indícala en el archivo .env"
             )
+        self._client = genai.Client(api_key=api_key)
 
-        self._client = genai.Client(api_key=self.settings.gemini_api_key)
+    def generate(self, prompt: str, model_id: str, fallback_model_id: str | None = None) -> tuple[str, str]:
+        model_to_use = model_id
+        try:
+            logger.info("Generating with Gemini Gemma model: %s (single-prompt)", model_to_use)
+            # R1: Single message prompt without system_instruction
+            response = self._client.models.generate_content(
+                model=model_to_use,
+                contents=prompt,
+            )
+            raw = extract_text_from_response(response)
+            return raw, model_to_use
+        except Exception as exc:
+            if fallback_model_id and fallback_model_id != model_to_use:
+                logger.warning(
+                    "Primary model %s failed: %s. Attempting fallback to %s",
+                    model_to_use,
+                    exc,
+                    fallback_model_id,
+                )
+                model_to_use = fallback_model_id
+                response = self._client.models.generate_content(
+                    model=model_to_use,
+                    contents=prompt,
+                )
+                raw = extract_text_from_response(response)
+                return raw, model_to_use
+            raise
+
+
+class OllamaBackend(BaseLLMBackend):
+    """Local Ollama backend for offline local open-weight inference."""
+
+    def __init__(self, base_url: str = "http://localhost:11434") -> None:
+        self.base_url = base_url.rstrip("/")
+
+    def generate(self, prompt: str, model_id: str, fallback_model_id: str | None = None) -> tuple[str, str]:
+        endpoint = f"{self.base_url}/api/generate"
+        logger.info("Generating with local Ollama at %s using model %s", endpoint, model_id)
+        try:
+            with httpx.Client(timeout=60.0) as client:
+                res = client.post(
+                    endpoint,
+                    json={
+                        "model": model_id,
+                        "prompt": prompt,
+                        "stream": False,
+                    },
+                )
+                if res.status_code != 200:
+                    raise RuntimeError(f"Ollama error HTTP {res.status_code}: {res.text}")
+                data = res.json()
+                return data.get("response", ""), model_id
+        except httpx.ConnectError as err:
+            raise RuntimeError(
+                f"No se pudo conectar al servidor local Ollama en {self.base_url}. "
+                "Asegúrate de ejecutar 'ollama serve' o cambia LLM_BACKEND=gemini en el archivo .env."
+            ) from err
+
+
+class CopywriterService:
+    """Service to generate professional audio ad scripts using Gemma models."""
+
+    def __init__(self, settings: Settings | None = None, backend: BaseLLMBackend | None = None) -> None:
+        self.settings = settings or get_settings()
+
+        if backend is not None:
+            self.backend = backend
+        elif self.settings.llm_backend == "ollama":
+            self.backend = OllamaBackend(base_url=self.settings.ollama_base_url)
+        else:
+            self.backend = GeminiBackend(api_key=self.settings.gemini_api_key)
 
     def generate_script(
         self,
@@ -101,13 +184,10 @@ class CopywriterService:
         tone: str = "energético",
         language: str = "es",
         duration_seconds: int = 30,
+        target_words_override: int | None = None,
     ) -> AdScriptResult:
-        """Generate an audio ad script with strict pacing and AIDA structure.
-
-        Attempts primary Gemma model first (e.g. gemma-3-27b-it);
-        falls back to fallback model (e.g. gemma-2-9b-it) if necessary.
-        """
-        sys_prompt, user_prompt = build_prompts(
+        """Generate an audio ad script with strict pacing and AIDA structure."""
+        prompt = build_unified_prompt(
             business_name=business_name,
             business_type=business_type,
             offer=offer,
@@ -115,39 +195,14 @@ class CopywriterService:
             tone=tone,
             language=language,
             duration_seconds=duration_seconds,
+            target_words_override=target_words_override,
         )
 
-        model_to_use = self.settings.gemma_model_id
-        raw_text = ""
-
-        try:
-            logger.info("Generating ad script with primary model: %s", model_to_use)
-            response = self._client.models.generate_content(
-                model=model_to_use,
-                contents=user_prompt,
-                config=types.GenerateContentConfig(
-                    system_instruction=sys_prompt,
-                    temperature=0.7,
-                ),
-            )
-            raw_text = extract_text_from_response(response)
-        except Exception as exc:
-            logger.warning(
-                "Primary model %s failed: %s. Attempting fallback to %s",
-                model_to_use,
-                exc,
-                self.settings.fallback_model_id,
-            )
-            model_to_use = self.settings.fallback_model_id
-            response = self._client.models.generate_content(
-                model=model_to_use,
-                contents=user_prompt,
-                config=types.GenerateContentConfig(
-                    system_instruction=sys_prompt,
-                    temperature=0.7,
-                ),
-            )
-            raw_text = extract_text_from_response(response)
+        raw_text, model_used = self.backend.generate(
+            prompt=prompt,
+            model_id=self.settings.gemma_model_id,
+            fallback_model_id=self.settings.fallback_model_id,
+        )
 
         script = clean_script(raw_text)
         words = [w for w in script.split() if w.strip()]
@@ -158,5 +213,5 @@ class CopywriterService:
             script=script,
             word_count=word_count,
             estimated_duration_seconds=estimated_duration,
-            model=model_to_use,
+            model=model_used,
         )

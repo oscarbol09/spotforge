@@ -34,6 +34,7 @@ ENV/
 static/audio/*.mp3
 static/audio/*.wav
 !static/audio/.gitkeep
+!static/audio/demo_*.mp3
 
 # Testing & Coverage
 .coverage

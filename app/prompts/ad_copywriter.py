@@ -1,4 +1,4 @@
-"""Prompt definitions and utilities for generating audio ad copy using Gemma."""
+"""Prompt definitions and utilities for generating audio ad copy using Gemma (v2)."""
 
 # Speech pacing constants (words per second)
 WORDS_PER_SECOND = {
@@ -29,55 +29,44 @@ def calculate_estimated_duration(text: str, language: str = "es") -> float:
     return round(len(words) / wps, 1)
 
 
-SYSTEM_COPYWRITER_PROMPT = """Eres un redactor creativo y locutor publicitario galardonado con más de 15 años de experiencia creando cuñas de radio y audio digital (Spotify Ads, Instagram Reels, cuñas radiales) de alta conversión para pequeños negocios locales.
-
-Tu misión es escribir el guión EXACTO que será leído por un locutor profesional.
-
-REGLAS INFALIBLES DE REDACCIÓN:
-1. ESTRUCTURA AIDA:
-   - ATENCIÓN (primeros 3-5 segundos): Un gancho impactante o pregunta que detenga al oyente en seco.
-   - INTERÉS: Conecta con el problema o deseo real del cliente.
-   - DESEO: Presenta la oferta irresistible del negocio. Menciona el nombre del negocio exactamente 2 veces.
-   - ACCIÓN: Llamada a la acción clara, directa y urgente (ej: 'Llama ya', 'Visítanos en...', 'Pide por WhatsApp').
-
-2. CONTROL DE TIEMPO Y PALABRAS:
-   - Duración objetivo: {duration_seconds} segundos.
-   - LÍMITE ESTRICTO: Entre {min_words} y {max_words} palabras.
-   - Si te pasas de palabras, el audio quedará cortado. Si usas muy pocas, sobrará tiempo.
-
-3. REGLAS DE LOCUCIÓN:
-   - NO incluyas acotaciones de producción como [música alegre], [efecto de sonido], (Voz en off:), ni indicaciones de tono.
-   - NO uses comillas, asteriscos, títulos, ni formato Markdown.
-   - NO uses emojis ni hashtags.
-   - Utiliza comas y puntos estratégicos para crear pausas naturales de respiración para el locutor.
-   - Escribe los números con palabras o dígitos legibles para locución.
-
-DEVUELVE ÚNICAMENTE EL TEXTO DIRECTO DEL GUIÓN LISTO PARA SER LEÍDO."""
-
-
-USER_COPYWRITER_PROMPT = """Crea el guión de cuña publicitaria con los siguientes datos:
-
-- Nombre del Negocio: {business_name}
-- Tipo de Negocio: {business_type}
-- Oferta / Promoción: {offer}
-- Llamada a la Acción (CTA): {call_to_action}
-- Tono deseado: {tone}
-- Idioma: {language_name}
-- Duración objetivo: {duration_seconds} segundos (Exactamente entre {min_words} y {max_words} palabras)
-
-Escribe el guión final:"""
-
-
 def get_language_name(lang_code: str) -> str:
     """Map language code to full descriptive name."""
     mapping = {
-        "es": "Español (Latinoamericano neutro / comercial)",
-        "en": "English (Natural, clear, commercial)",
+        "es": "Español (Latinoamericano comercial)",
+        "en": "English (Natural commercial)",
     }
     return mapping.get(lang_code.lower(), "Español")
 
 
-def build_prompts(
+# SpotForge v2 unified prompt template for Gemma (single message, no system_instruction)
+UNIFIED_PROMPT_TEMPLATE = """Eres un copywriter publicitario de radio profesional con 20 años de experiencia creando cuñas para negocios locales en Latinoamérica y España.
+
+REGLAS ESTRICTAS:
+1. Usa la fórmula AIDA (Atención -> Interés -> Deseo -> Acción).
+2. El guión debe durar aproximadamente {duration_seconds} segundos al leerlo en voz alta.
+   Referencia: ~2.5 palabras por segundo en español, ~2.8 en inglés.
+   Para {duration_seconds}s -> entre {min_words} y {max_words} palabras máximo.
+3. Primera frase: un gancho que detenga al oyente (pregunta retórica o dato impactante).
+4. Incluye el nombre del negocio al menos 2 veces.
+5. Termina con el call-to-action claro y memorable.
+6. Tono: {tone}.
+7. Idioma: {language_name}.
+8. Sin hashtags, emojis ni formato markdown. Sin comillas dentro del texto.
+9. Escribe TODOS los números, precios y teléfonos con palabras, tal como se dicen en voz alta.
+   Los teléfonos se dicen dígito por dígito con comas entre grupos (ejemplo: 'cinco, cinco, cinco, cero, uno, nueve, nueve').
+10. Puntuación estratégica: coma = pausa breve, punto = pausa media, puntos suspensivos = pausa dramática.
+
+Devuelve SOLO el texto del guión, sin explicaciones ni metadatos.
+
+DATOS DEL NEGOCIO:
+Negocio: {business_name}
+Tipo: {business_type}
+Oferta: {offer}
+Call to action: {call_to_action}
+"""
+
+
+def build_unified_prompt(
     business_name: str,
     business_type: str,
     offer: str,
@@ -85,23 +74,14 @@ def build_prompts(
     tone: str = "energético",
     language: str = "es",
     duration_seconds: int = 30,
-) -> tuple[str, str]:
-    """Build system and user prompts with calculated constraints.
-
-    Returns:
-        tuple[str, str]: (system_prompt, user_prompt)
-    """
-    target = calculate_target_words(duration_seconds, language)
+    target_words_override: int | None = None,
+) -> str:
+    """Build a single unified prompt containing all instructions and context for Gemma."""
+    target = target_words_override or calculate_target_words(duration_seconds, language)
     min_words = max(10, int(target * 0.85))
     max_words = int(target * 1.05)
 
-    sys_prompt = SYSTEM_COPYWRITER_PROMPT.format(
-        duration_seconds=duration_seconds,
-        min_words=min_words,
-        max_words=max_words,
-    )
-
-    user_prompt = USER_COPYWRITER_PROMPT.format(
+    return UNIFIED_PROMPT_TEMPLATE.format(
         business_name=business_name,
         business_type=business_type,
         offer=offer,
@@ -113,4 +93,24 @@ def build_prompts(
         max_words=max_words,
     )
 
-    return sys_prompt, user_prompt
+
+def build_prompts(
+    business_name: str,
+    business_type: str,
+    offer: str,
+    call_to_action: str,
+    tone: str = "energético",
+    language: str = "es",
+    duration_seconds: int = 30,
+) -> tuple[str, str]:
+    """Backward-compatible tuple returning (system_prompt, user_prompt)."""
+    unified = build_unified_prompt(
+        business_name=business_name,
+        business_type=business_type,
+        offer=offer,
+        call_to_action=call_to_action,
+        tone=tone,
+        language=language,
+        duration_seconds=duration_seconds,
+    )
+    return "", unified
