@@ -80,18 +80,18 @@ def mix_voice_and_music(
     music_directory = Path(music_dir)
     track_meta = next((t for t in AVAILABLE_TRACKS if t["id"] == music_track_id), None)
     if not track_meta or not track_meta["filename"]:
-        warnings.append(f"Pista musical '{music_track_id}' no reconocida. Se utilizó solo la voz.")
+        warnings.append(f"Music track '{music_track_id}' not recognized. Returned clean voice only.")
         return voice_path, warnings
 
     music_file = music_directory / track_meta["filename"]
     if not music_file.exists():
-        warnings.append(f"Archivo musical '{music_file.name}' no encontrado. Se utilizó solo la voz.")
+        warnings.append(f"Music file '{music_file.name}' not found. Returned clean voice only.")
         return voice_path, warnings
 
     # Check FFmpeg availability
     if not is_ffmpeg_available():
         logger.warning("FFmpeg is not available in PATH. Degraded to voice only.")
-        warnings.append("FFmpeg no está disponible en el servidor: se devolvió solo la voz sin música.")
+        warnings.append("FFmpeg is not available on the server: returned clean voice without music bed.")
         return voice_path, warnings
 
     voice_duration = measure_mp3_duration(voice_path)

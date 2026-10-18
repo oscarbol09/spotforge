@@ -1,17 +1,17 @@
-# ADR-002: Locución Comercial de Alta Fidelidad con ElevenLabs
+# ADR-002: High-Fidelity Studio Voice Synthesis with ElevenLabs
 
-## Estado
-Aceptado
+## Status
+Accepted
 
-## Contexto
-El éxito de una cuña de radio, anuncio de Stories o TikTok depende críticamente de la entonación, modulación humana y prosodia natural de la voz. Los motores TTS locales de código abierto actuales sufren de artefactos robóticos o falta de energía comercial en español.
+## Context
+The success of a broadcast radio spot, Instagram Story, or TikTok ad depends heavily on human-like intonation, natural prosody, and commercial energy. Current local open-source TTS models still exhibit robotic artifacts or lack lively commercial punch in multi-lingual commercial contexts.
 
-## Decisión
-Integrar la API oficial de **ElevenLabs** utilizando el modelo `eleven_multilingual_v2` con fallback configurable vía `ELEVENLABS_MODEL`.
-- Catálogo de voces comerciales curadas (Rachel, Adam, Antoni, Bella).
-- Mapeo dinámico de nombres de locutores y control de estabilidad (0.45) y similarity boost (0.75).
-- Métricas auditables de consumo de caracteres por spot.
+## Decision
+Integrate the official **ElevenLabs** API utilizing the `eleven_multilingual_v2` model with configurable fallback via `ELEVENLABS_MODEL`.
+- Curated commercial voice talent profiles (Rachel, Adam, Antoni, Bella).
+- Dynamic voice name resolution and tuned voice settings (`stability: 0.45`, `similarity_boost: 0.75`).
+- Granular character usage tracking per spot to provide transparent cost telemetry.
 
-## Consecuencias
-- **Positivas**: Calidad de audio indistinguible de un estudio de locución comercial.
-- **Trade-offs**: Requiere conectividad a Internet y una API key válida de ElevenLabs.
+## Consequences
+- **Positive**: Studio-grade broadcast audio quality indistinguishable from professional voiceover talent.
+- **Trade-offs**: Requires internet connectivity and an active ElevenLabs API key.

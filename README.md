@@ -1,7 +1,7 @@
 # 🎙️ SpotForge
 
-> **Generador de cuñas publicitarias de audio con IA para negocios locales y freelancers.**  
-> *Construido con modelos de pesos abiertos para el [Hacktoberfest 2026 Open-Source AI Challenge: Week 2 (Side Hustle)](https://dev.to/challenges/hacktoberfest-week2-2026-10-12).*
+> **AI-Powered Commercial Audio Ad Generator for Local Businesses & Freelancers.**  
+> *Built with open-weight models for the [Hacktoberfest 2026 Open-Source AI Challenge: Week 2 (Side Hustle)](https://dev.to/challenges/hacktoberfest-week2-2026-10-12).*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
@@ -12,171 +12,171 @@
 
 ---
 
-## 💡 ¿Qué es SpotForge?
+## 💡 What is SpotForge?
 
-Una pizzería de barrio, barbería tradicional, taller mecánico o dentista local necesita cuñas de audio persuasivas para pautar en **Instagram Stories, TikTok Ads, radio comunitaria o el sistema de espera telefónica**.
+Neighborhood pizzerias, local barbershops, auto repair garages, and boutique clinics frequently need high-converting audio ads for **Instagram Stories, TikTok Ads, community radio, or phone hold systems**.
 
-Sin embargo, enfrentan un dilema prohibitivo:
-- **Agencia de publicidad / Estudio de grabación**: cobra entre **$300 y $800 USD** por spot de 30 segundos.
-- **Hacerlo ellos mismos**: no tienen copywriters comerciales ni locutores profesionales.
+Yet they face a steep economic barrier:
+- **Traditional Creative Agency / Recording Studio**: Charges between **\$300 and \$800 USD** for a single 30-second commercial script and professional voiceover.
+- **Doing It Themselves**: Small business owners lack professional copywriting training and sound equipment, resulting in low-energy phone recordings that listeners skip.
 
-**SpotForge** convierte **3 datos básicos del negocio** (nombre, oferta y llamada a la acción) en una **cuña de audio lista para emisión comercial**:
-1. **Redactor AIDA con IA de Pesos Abiertos**: Google Gemma 4 genera un guión persuasivo con cadencia estricta (~2.5 palabras por segundo).
-2. **Normalizador Fonético Determinista**: Convierte automáticamente promociones ("2x1"), monedas ("$15"), porcentajes ("30%") y números telefónicos ("555-0199") a palabras completas con pausas de respiración naturales para TTS.
-3. **Locución Profesional de Estudio**: ElevenLabs sintetiza la voz con dicción y energía comercial.
-4. **Control de Duración Real**: Mide los segundos exactos del MP3 con `mutagen` y aplica un reintento adaptativo si el audio excede la cota pautada.
-5. **Mezcla con Cama Musical (FFmpeg)**: Combina la voz con música de fondo CC0 con *ducking* al 15% y fundido de salida suave (*fade out* de 2 segundos).
+**SpotForge** turns **3 basic facts** (business name, special offer, and call to action) into a **broadcast-ready commercial audio ad in under 15 seconds**:
+1. **AIDA Ad Copywriting with Open Weights**: Google Gemma 4 generates a high-converting script following the AIDA formula (Attention ➔ Interest ➔ Desire ➔ Action) with strict audio pacing limits (~2.5 words/second in Spanish, ~2.8 words/second in English).
+2. **Deterministic Phonetic Normalizer**: Automatically transforms promotional multipliers ("2x1"), currencies ("\$15"), percentages ("30%"), and telephone numbers ("555-0199") into natural spoken words with natural breathing pauses for TTS.
+3. **Studio Voiceover**: ElevenLabs synthesizes studio-grade voice talent with commercial energy and natural inflection.
+4. **Real MP3 Duration Calibration**: Accurately measures physical audio length with `mutagen` and executes an adaptive 1-retry rewrite loop if speech exceeds target bounds.
+5. **Background Music Mixing (FFmpeg)**: Blends the voiceover with royalty-free CC0 musical beds, applying 15% automatic background ducking, infinite looping, and a smooth 2-second tail fadeout.
 
-El resultado: un spot con acabado de radio profesional producido por **centavos**, que un freelancer puede comercializar a sus clientes locales entre **$5 y $15 USD**, generando más de un **97% de margen de ganancia**.
+The result: a broadcast-quality commercial spot produced for **pennies**, allowing freelancers to resell audio assets to local clients for **\$5 to \$15 USD** with over **97% gross profit margins**.
 
 ---
 
-## 🎧 Cuñas Oficiales de Demostración
+## 🎧 Official Audio Demo Spots
 
-SpotForge incluye tres ejemplos reales generados por el pipeline completo (Gemma 4 + Normalizador + ElevenLabs + FFmpeg):
+SpotForge includes three authentic sample commercials generated end-to-end through the complete pipeline (Gemma 4 + Phonetic Normalizer + ElevenLabs + FFmpeg):
 
-| Negocio | Giro Comercial | Locutor | Cama Musical | Duración Real | Archivo de Audio |
+| Client Business | Category | Voice Talent | Background Music | Real Duration | Audio File |
 |---|---|---|---|---|---|
-| **Pizzería Don Mario** | Pizzería artesanal italiana con horno de leña | Rachel | ⚡ Upbeat Commercial (110 BPM) | **28.4s** | [`demo_pizzeria.mp3`](static/audio/demo_pizzeria.mp3) |
-| **Barbería El Bigote** | Barbería clásica y estilismo masculino | Antoni | 🔥 Urban Energy (120 BPM) | **35.0s** | [`demo_barber.mp3`](static/audio/demo_barber.mp3) |
-| **Apex Auto Repair** | Taller mecánico automotriz y frenos | Adam | ☕ Chill Acoustic (75 BPM) | **36.8s** | [`demo_autorepair.mp3`](static/audio/demo_autorepair.mp3) |
+| **Pizzería Don Mario** | Wood-fired artisanal Italian pizzeria | Rachel | ⚡ Upbeat Commercial (110 BPM) | **28.4s** | [`demo_pizzeria.mp3`](static/audio/demo_pizzeria.mp3) |
+| **Barbería El Bigote** | Classic executive men's grooming & hot towel | Antoni | 🔥 Urban Energy (120 BPM) | **35.0s** | [`demo_barber.mp3`](static/audio/demo_barber.mp3) |
+| **Apex Auto Repair** | Multi-brand automotive mechanics & brake service | Adam | ☕ Chill Acoustic (75 BPM) | **36.8s** | [`demo_autorepair.mp3`](static/audio/demo_autorepair.mp3) |
 
 ---
 
-## 💸 Economía Unitaria y Modelo de Negocio ("Side Hustle")
+## 💸 Side Hustle Unit Economics & Business Model
 
-A diferencia de afirmaciones fantasiosas de "$0 por spot", SpotForge presenta un **modelo de negocio transparente y jurídicamente viable**:
+Unlike projects that claim "$0 cost" by ignoring commercial licensing terms, SpotForge provides a **transparent, legally compliant business model**:
 
-| Concepto | Plan Starter ElevenLabs ($6/mes) | Agencia Tradicional |
+| Item | ElevenLabs Starter Plan ($6/mo) | Traditional Audio Agency |
 |---|---|---|
-| **Costo del modelo de lenguaje (Gemma 4)** | **$0.00** (Google AI Studio Free Tier u Ollama local) | $150 – $300 (copywriter humano) |
-| **Costo de locución (ElevenLabs)** | **$0.08** (400 chars incluidos en cuota de 30k) / **$0.12** extra | $150 – $500 (estudio + locutor) |
-| **Costo de mezcla musical (FFmpeg)** | **$0.00** (proceso local en servidor con música CC0) | $50 – $100 (ingeniero de sonido) |
-| **Costo total de producción por spot** | **$0.08 – $0.12 USD** | **$350 – $900 USD** |
-| **Precio de venta sugerido al negocio local** | **$5.00 – $15.00 USD** | $350 – $900 USD |
-| **Margen bruto del freelance** | **97.6% – 99.2%** | N/A |
-| **Spots incluidos en el plan base de $6** | **~75 spots de 30 segundos** | 0 |
+| **Copywriting Engine (Gemma 4)** | **$0.00** (Google AI Studio Free Tier or local Ollama) | $150 – $300 (Human copywriter) |
+| **Studio Voice Synthesis (ElevenLabs)** | **$0.08** (400 chars within 30k quota) / **$0.12** extra | $150 – $500 (Studio + Voice talent) |
+| **Music Mixing & Sound Design (FFmpeg)** | **$0.00** (Local server process + CC0 Music Beds) | $50 – $100 (Audio engineer) |
+| **Total Production Cost per Ad** | **$0.08 – $0.12 USD** | **$350 – $900 USD** |
+| **Suggested Resale Price to Client** | **$5.00 – $15.00 USD** | $350 – $900 USD |
+| **Freelancer Gross Profit Margin** | **97.6% – 99.2%** | N/A |
+| **Spots Included in Base $6 Plan** | **~75 commercial ads of 30 seconds** | 0 |
 
-> Si un freelance vende solo **10 spots al mes a $10 USD** cada uno, factura **$100 USD** con un costo de producción de **$6 USD** de suscripción Starter, obteniendo **$94 USD de ganancia neta** en sus primeras semanas de side hustle.
-
----
-
-## 🌟 ¿Por qué Importa la Innovación Abierta?
-
-- **Pesos Abiertos para Redacción Persuasiva**: El motor creativo corre sobre **Google Gemma 4** (`gemma-4-26b-a4b-it`). Al ser un modelo de pesos abiertos, el desarrollador retiene el control de su infraestructura y no depende de modelos de caja negra que cambian tarifas o deprecian versiones sin previo aviso.
-- **Portabilidad Cloud u Offline**: SpotForge implementa la interfaz `BaseLLMBackend`. Puede ejecutarse en la nube con Google AI Studio o **100% offline y local** mediante Ollama (`LLM_BACKEND=ollama`), garantizando privacidad absoluta para los datos promocionales de los clientes.
-- **Composición de Estándares Abiertos**: La mezcla de audio se apoya en **FFmpeg**, estándar abierto de procesamiento multimedia, y pistas musicales con licencia CC0 dominio público.
+> **The Freelancer Playbook**: A freelancer managing social media for 5 local shops can deliver 2 fresh promotional audio ads per week for an extra \$30/month per client. That represents **\$150/month in revenue against \$6 in operational software costs**—a sustainable, high-margin side hustle.
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## 🌟 Why Open Innovation Matters
+
+- **Open-Weight Intelligence for Copywriting**: Powered by **Google Gemma 4** (`gemma-4-26b-a4b-it`). Open-weight models empower developers with complete control over their infrastructure, eliminating dependence on closed black-box APIs that alter pricing or deprecate versions unexpectedly.
+- **Cloud or Offline Portability**: SpotForge implements the `BaseLLMBackend` interface. It runs effortlessly via Google AI Studio in the cloud or **100% offline and locally** using Ollama (`LLM_BACKEND=ollama`), guaranteeing complete privacy for proprietary client promotions and private customer details.
+- **Open Media Standards**: Audio mixing relies on **FFmpeg**, the open standard for multimedia manipulation, and CC0 public domain musical beds.
+
+---
+
+## 🏗️ System Architecture
 
 ```mermaid
 flowchart TD
-    A["🏪 Input del Negocio\n(Nombre, Oferta, CTA, Tono)"] --> B["🧠 Gemma 4 Open-Weights\n(Redacción AIDA sin system_instruction)"]
-    B --> C["🔢 Normalizador Fonético\n(2x1 ➔ dos por uno, $15 ➔ quince dólares)"]
-    C --> D["🎙️ ElevenLabs API Studio\n(Multilingual v2 - Rachel, Adam, Antoni)"]
-    D --> E["⏱️ Medición Mutagen\n(Duración real del MP3)"]
-    E -- "¿Excede target + 3s?" --> F["🔄 1 Reintento Adaptativo\n(Ajuste proporcional de palabras)"]
+    A["🏪 Business Facts Input\n(Name, Offer, CTA, Tone)"] --> B["🧠 Gemma 4 Open-Weights\n(Single-prompt AIDA Copywriting)"]
+    B --> C["🔢 Phonetic Text Normalizer\n(2x1 ➔ two for one, $15 ➔ fifteen dollars)"]
+    C --> D["🎙️ ElevenLabs Studio Voice\n(Multilingual v2 - Rachel, Adam, Antoni, Bella)"]
+    D --> E["⏱️ Mutagen Duration Audit\n(Measure physical MP3 runtime)"]
+    E -- "Exceeds target + 3s?" --> F["🔄 Adaptive 1-Retry Loop\n(Proportional word-budget reduction)"]
     F -.-> C
-    E -- "Duración correcta" --> G["🎚️ FFmpeg Mixer\n(Cama musical CC0 + 15% ducking + fadeout 2s)"]
-    G --> H["🎧 MP3 Final Broadcast\n(static/audio/spot_uuid.mp3)"]
+    E -- "Runtime within bounds" --> G["🎚️ FFmpeg Audio Mixer\n(CC0 Music Bed + 15% Ducking + 2s Fadeout)"]
+    G --> H["🎧 Broadcast-Ready MP3\n(static/audio/spot_uuid.mp3)"]
 ```
 
 ---
 
-## ⚖️ Uso comercial y licencias
+## ⚖️ Commercial Use & Licensing
 
-### Licencia de SpotForge
-El código fuente de SpotForge está bajo licencia **MIT** (código abierto, uso libre).
+### SpotForge License
+SpotForge is open-source software released under the **MIT License**.
 
-### Licencia del modelo de lenguaje (Gemma)
-Google Gemma es un modelo de pesos abiertos distribuido bajo los [Gemma Terms of Use](https://ai.google.dev/gemma/terms). Permite uso comercial sujeto a las condiciones de uso aceptable de Google.
+### Language Model License (Gemma)
+Google Gemma is an open-weight model family distributed under the [Gemma Terms of Use](https://ai.google.dev/gemma/terms), permitting commercial use subject to Google's acceptable use policy.
 
-### Licencia de las voces (ElevenLabs) — LEER CON ATENCIÓN
-- El plan **Free** de ElevenLabs **NO incluye derechos comerciales** sobre el audio generado. Los audios generados bajo el plan gratuito solo pueden usarse para fines personales o de prueba y requieren atribución.
-- Para **vender spots a clientes**, usarlos en publicidad pagada (Instagram Ads, TikTok Ads, radio, Spotify) o integrarlos en un negocio comercial, **debes contar con al menos el plan Starter ($6/mes)** de ElevenLabs con tu propia API key.
-- SpotForge opera bajo el modelo **BYOK (Bring Your Own Key)**: cada usuario configura su propia API key en el archivo `.env`, por lo que los derechos comerciales del audio dependen exclusivamente del plan que el usuario tenga contratado con ElevenLabs. SpotForge no intermedia ni garantiza derechos comerciales sobre audios generados con keys de terceros.
+### Voice Synthesis Licensing (ElevenLabs) — IMPORTANT
+- The **Free Plan** from ElevenLabs **does NOT include commercial rights** over generated audio. Free-tier audio may only be used for personal testing and requires public attribution.
+- To **resell audio spots to clients**, use them in paid social media ads (Instagram, TikTok, YouTube), radio, or podcast sponsorships, you **must hold at least the Starter Plan ($6 USD/month)** with your own ElevenLabs API key.
+- SpotForge utilizes a **BYOK (Bring Your Own Key)** architecture: each user inputs their own API key in `.env`. Commercial rights are cleanly backed by the user's active tier.
 
-### Licencia de las camas musicales
-Las pistas musicales de fondo incluidas en SpotForge provienen de fuentes de dominio público / CC0. Ver detalle en [`static/music/LICENSES.md`](static/music/LICENSES.md).
-
----
-
-## 📐 Decisiones de Arquitectura (ADRs)
-
-El desarrollo del proyecto está documentado formalmente mediante Architecture Decision Records:
-
-- [**ADR-001**: Adopción de Google Gemma 4 como Redactor Publicitario de Pesos Abiertos](docs/adr/ADR-001-gemma-open-weights.md)
-- [**ADR-002**: Locución Comercial de Alta Fidelidad con ElevenLabs](docs/adr/ADR-002-elevenlabs-voiceover.md)
-- [**ADR-003**: Arquitectura Backend FastAPI y Frontend SPA Minimalista](docs/adr/ADR-003-fastapi-vanilla-spa.md)
-- [**ADR-004**: Capa Determinista de Normalización de Texto para TTS](docs/adr/ADR-004-deterministic-text-normalization.md)
-- [**ADR-005**: Licenciamiento Comercial Honesto y Modelo BYOK](docs/adr/ADR-005-licensing-and-commercial-byok.md)
-- [**ADR-006**: Mezcla Profesional de Cama Musical de Fondo con FFmpeg](docs/adr/ADR-006-ffmpeg-audio-mixing.md)
-- [**ADR-007**: Medición de Duración Real del MP3 y Bucle Adaptativo de 1 Reintento](docs/adr/ADR-007-real-duration-control.md)
+### Background Music Beds
+All included musical beds are licensed under **Creative Commons Zero (CC0 1.0 Universal / Public Domain)**. See details in [`static/music/LICENSES.md`](static/music/LICENSES.md).
 
 ---
 
-## 🚀 Instalación y Puesta en Marcha
+## 📐 Architecture Decision Records (ADRs)
 
-### Prerrequisitos
-- **Python 3.10+** (probado en Python 3.12)
-- **FFmpeg 6+** instalado y en el `PATH` del sistema
-- Clave de API de Google AI Studio gratuita ([aistudio.google.com](https://aistudio.google.com/))
-- Clave de API de ElevenLabs ([elevenlabs.io](https://elevenlabs.io/))
+Key architectural choices are formally documented through ADRs:
 
-### 1. Clonar el repositorio
+- [**ADR-001**: Adoption of Google Gemma 4 as Open-Weight Ad Copywriter](docs/adr/ADR-001-gemma-open-weights.md)
+- [**ADR-002**: High-Fidelity Studio Voice Synthesis with ElevenLabs](docs/adr/ADR-002-elevenlabs-voiceover.md)
+- [**ADR-003**: FastAPI Backend and Minimalist Vanilla SPA Frontend](docs/adr/ADR-003-fastapi-vanilla-spa.md)
+- [**ADR-004**: Deterministic Phonetic Text Normalization Layer for TTS](docs/adr/ADR-004-deterministic-text-normalization.md)
+- [**ADR-005**: Commercial Licensing Integrity and BYOK Architecture](docs/adr/ADR-005-licensing-and-commercial-byok.md)
+- [**ADR-006**: Professional Background Musical Bed Mixing with FFmpeg](docs/adr/ADR-006-ffmpeg-audio-mixing.md)
+- [**ADR-007**: Real MP3 Duration Measurement and Adaptive 1-Retry Pacing Loop](docs/adr/ADR-007-real-duration-control.md)
+
+---
+
+## 🚀 Quickstart & Installation
+
+### Prerequisites
+- **Python 3.10+** (tested on Python 3.12)
+- **FFmpeg 6+** installed and available in system `PATH`
+- Free Google AI Studio API Key ([aistudio.google.com](https://aistudio.google.com/))
+- ElevenLabs API Key ([elevenlabs.io](https://elevenlabs.io/))
+
+### 1. Clone Repository
 ```bash
 git clone https://github.com/your-username/spotforge.git
 cd spotforge
 ```
 
-### 2. Instalar dependencias
+### 2. Setup Virtual Environment
 ```bash
 python -m venv venv
-# En Windows:
+# On Windows:
 venv\Scripts\activate
-# En Linux/macOS:
+# On Linux / macOS:
 source venv/bin/activate
 
 pip install -r requirements.txt
 ```
 
-### 3. Configurar variables de entorno
+### 3. Configure Environment Variables
 ```bash
 cp .env.example .env
 ```
-Edita `.env` con tus credenciales:
+Edit `.env` with your credentials:
 ```ini
-GEMINI_API_KEY=tu_clave_de_gemini
-ELEVENLABS_API_KEY=tu_clave_de_elevenlabs
+GEMINI_API_KEY=your_gemini_api_key
+ELEVENLABS_API_KEY=your_elevenlabs_api_key
 GEMMA_MODEL_ID=gemma-4-26b-a4b-it
 ELEVENLABS_MODEL=eleven_multilingual_v2
-LLM_BACKEND=gemini # o 'ollama' para inferencia local
+LLM_BACKEND=gemini # or 'ollama' for offline local inference
 ENABLE_MUSIC_MIXING=true
 AUDIO_TTL_HOURS=24
 ```
 
-### 4. Iniciar el servidor
+### 4. Run Development Server
 ```bash
 uvicorn main:app --reload --port 8000
 ```
-Visita `http://localhost:8000` en tu navegador.
+Open [http://localhost:8000](http://localhost:8000) in your browser.
 
-### 5. Ejecutar suite de pruebas automatizadas
+### 5. Run Automated Tests
 ```bash
 pytest -v
 ```
 
 ---
 
-## 🏆 Categorías del Desafío Hacktoberfest 2026
-- **Overall Winner ($250 USD)**: Proyecto enfocado íntegramente en la temática *Side Hustle* con economía unitaria sólida.
-- **Best Use of Gemma ($200 USD)**: Redacción persuasiva AIDA con modelo Gemma 4 open-weights, filtrado de cadenas de pensamiento y soporte Ollama local.
-- **Best Use of ElevenLabs ($100 USD)**: Locución comercial de alta definición con catálogo dinámico de voces y medición de consumo de caracteres.
-- **Best Use of Render ($200 USD)**: Blueprint `render.yaml` listo para despliegue productivo con health checks nativos.
+## 🏆 Hacktoberfest 2026 Categories
+- **Overall Winner ($250 USD)**: Full-featured project built for the *Side Hustle* prompt with transparent unit economics and high-margin freelance viability.
+- **Best Use of Gemma ($200 USD)**: AIDA prompt design on Google's open-weight **Gemma 4** (`gemma-4-26b-a4b-it`), thought token extraction, and local Ollama support.
+- **Best Use of ElevenLabs ($100 USD)**: Commercial voice synthesis using **ElevenLabs Multilingual v2**, dynamic voice discovery, and precise character telemetry.
+- **Best Use of Render ($200 USD)**: Production-ready infrastructure blueprint in `render.yaml` with automated health checks.
 
 ---
 
-## 📄 Licencia
-Distribuido bajo la Licencia **MIT**. Consulta `LICENSE` para más información.
+## 📄 License
+Released under the **MIT License**. See `LICENSE` for details.

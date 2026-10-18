@@ -1,15 +1,17 @@
-# ADR-007: Medición de Duración Real del MP3 y Bucle Adaptativo de 1 Reintento
+# ADR-007: Real MP3 Duration Measurement and Adaptive 1-Retry Pacing Loop
 
-## Estado
-Aceptado
+## Status
+Accepted
 
-## Contexto
-Los anuncios comerciales de radio, Spotify Ads y Stories tienen límites estrictos de tiempo (15s, 30s o 60s). La heurística de estimar la duración multiplicando palabras por 0.4 segundos es aproximada y puede fallar por la velocidad natural de locución de cada voz de ElevenLabs.
+## Context
+Commercial ad spots for radio, Spotify Ads, and social media Stories enforce strict runtime windows (15s, 30s, or 60s). Pacing heuristics (such as multiplying words by 0.4 seconds) are approximations that often drift depending on the unique cadence and pauses of different voice talents.
 
-## Decisión
-1. **Medición binaria real**: Utilizar la biblioteca `mutagen` para extraer la duración exacta en segundos del archivo MP3 sintetizado.
-2. **Bucle adaptativo de 1 reintento**: Si la duración real excede el objetivo en más de 3 segundos (`measured_duration > target + 3.0s`), el sistema recalcula proporcionalmente el número de palabras (`reduced_word_target = word_count * (target / measured)`), solicita un reintento a Gemma con esa cota estricta y re-sintetiza el audio.
-3. **Límite estricto**: Máximo 1 reintento para prevenir latencias prolongadas o consumo excesivo de créditos.
+## Decision
+1. **Accurate Binary Measurement**: Utilize the `mutagen` audio library to measure the exact physical runtime in seconds from the rendered MP3 header.
+2. **Adaptive 1-Retry Loop**: If measured audio exceeds the target duration by more than 3 seconds (`measured_duration > target + 3.0s`), the system dynamically recalculates a reduced word target:
+   $$\text{reduced\_target} = \text{word\_count} \times \left(\frac{\text{target}}{\text{measured}}\right)$$
+   and requests a compressed rewrite from Gemma before re-synthesizing.
+3. **Hard Bounds**: Strict maximum of 1 retry to prevent excessive latency and unnecessary token/character quota consumption.
 
-## Consecuencias
-- **Positivas**: Garantía de cumplimiento del tiempo pautado para campañas publicitarias.
+## Consequences
+- **Positive**: Strict adherence to broadcast ad specifications.

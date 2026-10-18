@@ -82,7 +82,7 @@ async def generate_audio_spot(
             logger.error("Gemma script generation failed: %s", exc)
             raise HTTPException(
                 status_code=status.HTTP_502_BAD_GATEWAY,
-                detail=f"Fallo en la generación de guión con modelo Gemma: {exc}",
+                detail=f"Gemma ad script generation failed: {exc}",
             ) from exc
 
     # Step 2: R3 Deterministic Normalization for TTS
@@ -103,13 +103,13 @@ async def generate_audio_spot(
         logger.error("ElevenLabs synthesis error: %s", exc)
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
-            detail=f"Fallo en síntesis de audio con ElevenLabs: {exc}",
+            detail=f"ElevenLabs audio synthesis failed: {exc}",
         ) from exc
     except Exception as exc:
         logger.error("Unexpected synthesis error: %s", exc)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error inesperado al procesar el audio: {exc}",
+            detail=f"Unexpected error processing audio: {exc}",
         ) from exc
 
     voice_path = audio_result.file_path
@@ -154,11 +154,11 @@ async def generate_audio_spot(
 
             if measured_duration > (request.duration_seconds + 3.0):
                 warnings.append(
-                    f"El audio dura {measured_duration}s tras reintento, superando el objetivo de {request.duration_seconds}s."
+                    f"Audio duration is {measured_duration}s after adaptive retry, exceeding target {request.duration_seconds}s."
                 )
         except Exception as retry_err:
             logger.warning("Adaptive duration retry failed: %s. Keeping first audio take.", retry_err)
-            warnings.append("No se pudo completar el reintento de ajuste de duración.")
+            warnings.append("Could not complete duration adjustment retry.")
 
     # Step 5: Audio Mixing (FFmpeg background music bed)
     final_audio_path = voice_path

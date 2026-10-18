@@ -1,31 +1,38 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎙️ SpotForge — Generador de Cuñas Publicitarias de Audio con IA</title>
-  <meta name="description" content="Crea cuñas de audio publicitarias de ~30 segundos para pequeños negocios con Google Gemma, ElevenLabs y FFmpeg.">
-  <!-- Tailwind CSS CDN -->
+  <title>SpotForge 🎙️ — AI Commercial Audio Ad Generator</title>
+  
+  <!-- Modern Inter Font & Tailwind CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
           colors: {
             brand: {
-              50: '#f5f3ff',
-              100: '#ede9fe',
-              500: '#8b5cf6',
-              600: '#7c3aed',
-              700: '#6d28d9',
+              50: '#faf5ff',
+              500: '#a855f7',
+              600: '#9333ea',
+              700: '#7e22ce',
             }
           }
         }
       }
     }
   </script>
-  <link rel="stylesheet" href="/static/css/styles.css">
+
+  <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
 
@@ -40,13 +47,13 @@
           <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 bg-clip-text text-transparent">
             SpotForge
           </span>
-          <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-900/40 text-purple-300 border border-purple-700/50">
+          <span data-i18n="badge_studio" class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-900/40 text-purple-300 border border-purple-700/50">
             Open-Source AI Studio (v2)
           </span>
         </div>
       </div>
 
-      <!-- Partner Badges -->
+      <!-- Partner Badges & Language Toggle -->
       <div class="flex items-center space-x-2 sm:space-x-3">
         <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -58,7 +65,14 @@
         <span class="hidden lg:inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">
           FFmpeg Mix
         </span>
-        <a href="/docs" target="_blank" class="text-xs text-purple-400 hover:text-purple-300 transition-colors flex items-center gap-1">
+        
+        <!-- Language Switcher (EN | ES) -->
+        <div class="flex items-center bg-slate-900 border border-slate-700/80 rounded-lg p-0.5 text-xs font-semibold">
+          <button id="lang-btn-en" type="button" class="px-2.5 py-1 rounded transition-all bg-purple-600 text-white font-bold">EN</button>
+          <button id="lang-btn-es" type="button" class="px-2.5 py-1 rounded transition-all text-slate-400 hover:text-white">ES</button>
+        </div>
+
+        <a href="/docs" target="_blank" data-i18n="api_docs" class="text-xs text-purple-400 hover:text-purple-300 transition-colors flex items-center gap-1 ml-1">
           API Docs ↗
         </a>
       </div>
@@ -69,13 +83,13 @@
   <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
     <div class="text-center max-w-3xl mx-auto mb-10">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold mb-3">
-        <span>🏆 Hacktoberfest 2026: Side Hustle Edition</span>
+        <span data-i18n="hero_badge">🏆 Hacktoberfest 2026: Side Hustle Edition</span>
       </div>
       <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
-        Cuñas de Audio de ~30s que <span class="bg-gradient-to-r from-amber-400 to-purple-400 bg-clip-text text-transparent">Venden de Verdad</span>
+        <span data-i18n="hero_title_part1">Broadcast-Ready ~30s Audio Ads That </span><span data-i18n="hero_title_highlight" class="bg-gradient-to-r from-amber-400 to-purple-400 bg-clip-text text-transparent">Actually Convert</span>
       </h1>
-      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
-        Convierte 3 datos de tu cliente local en una cuña publicitaria con guión AIDA, normalización fonética de números, locución profesional y cama musical en segundos.
+      <p data-i18n="hero_subtitle" class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        Turn 3 facts about any local store into a broadcast-ready audio ad with AIDA copywriting, phonetic text normalization, studio voiceover, and musical bed mixing in seconds.
       </p>
     </div>
 
@@ -88,115 +102,115 @@
     <!-- Workspace Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- Columna Izquierda: Formulario (7 columnas) -->
+      <!-- Left Column: Form (7 cols) -->
       <div class="lg:col-span-7 space-y-6">
         <form id="ad-form" class="glass-panel p-6 sm:p-8 rounded-2xl space-y-6">
           <div class="border-b border-slate-800 pb-4">
             <h2 class="text-lg font-bold text-white flex items-center gap-2">
               <span class="w-6 h-6 rounded-full bg-purple-600/30 text-purple-400 text-xs flex items-center justify-center font-bold">1</span>
-              Datos del Negocio Local
+              <span data-i18n="step1_title">1. Local Business Details</span>
             </h2>
-            <p class="text-xs text-slate-400 mt-1">Gemma redactará el guión publicitario usando la fórmula AIDA.</p>
+            <p data-i18n="step1_desc" class="text-xs text-slate-400 mt-1">Gemma crafts a persuasive commercial script following the proven AIDA formula.</p>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label for="business_name" class="block text-xs font-semibold text-slate-300 mb-1">Nombre del Negocio *</label>
-              <input type="text" id="business_name" name="business_name" required placeholder="Ej: Pizzería Don Mario"
+              <label for="business_name" data-i18n="label_business_name" class="block text-xs font-semibold text-slate-300 mb-1">Business Name *</label>
+              <input type="text" id="business_name" name="business_name" required data-i18n-placeholder="ph_business_name" placeholder="e.g., Don Mario's Pizzeria"
                 class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
             </div>
             <div>
-              <label for="business_type" class="block text-xs font-semibold text-slate-300 mb-1">Giro / Tipo Comercial *</label>
-              <input type="text" id="business_type" name="business_type" required placeholder="Ej: Restaurante italiano, Barbería"
+              <label for="business_type" data-i18n="label_business_type" class="block text-xs font-semibold text-slate-300 mb-1">Commercial Category / Niche *</label>
+              <input type="text" id="business_type" name="business_type" required data-i18n-placeholder="ph_business_type" placeholder="e.g., Artisanal Italian Restaurant, Barbershop"
                 class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
             </div>
           </div>
 
           <div>
-            <label for="offer" class="block text-xs font-semibold text-slate-300 mb-1">Oferta Principal o Promoción *</label>
-            <textarea id="offer" name="offer" required rows="2" placeholder="Ej: 2x1 en pizzas familiares los martes y jueves con entrega a domicilio gratis"
+            <label for="offer" data-i18n="label_offer" class="block text-xs font-semibold text-slate-300 mb-1">Core Promotion or Special Offer *</label>
+            <textarea id="offer" name="offer" required rows="2" data-i18n-placeholder="ph_offer" placeholder="e.g., 2-for-1 large pizzas on Tuesdays & Thursdays with free home delivery"
               class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"></textarea>
           </div>
 
           <div>
-            <label for="call_to_action" class="block text-xs font-semibold text-slate-300 mb-1">Llamada a la Acción (CTA) *</label>
-            <input type="text" id="call_to_action" name="call_to_action" required placeholder="Ej: Llama al 555-0199 o pide por WhatsApp hoy mismo"
+            <label for="call_to_action" data-i18n="label_cta" class="block text-xs font-semibold text-slate-300 mb-1">Call to Action (CTA) *</label>
+            <input type="text" id="call_to_action" name="call_to_action" required data-i18n-placeholder="ph_cta" placeholder="e.g., Call 555-0199 or order via WhatsApp today"
               class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
           </div>
 
-          <!-- Paso 2: Personalización de Producción -->
+          <!-- Step 2: Production & Style -->
           <div class="border-t border-slate-800 pt-6">
             <h2 class="text-lg font-bold text-white flex items-center gap-2 mb-4">
               <span class="w-6 h-6 rounded-full bg-purple-600/30 text-purple-400 text-xs flex items-center justify-center font-bold">2</span>
-              Estilo y Producción de Audio
+              <span data-i18n="step2_title">2. Production Style & Audio Settings</span>
             </h2>
 
-            <!-- Tono -->
+            <!-- Tone Selector -->
             <div class="mb-4">
-              <label class="block text-xs font-semibold text-slate-300 mb-2">Tono Comercial</label>
+              <label data-i18n="label_tone" class="block text-xs font-semibold text-slate-300 mb-2">Commercial Tone</label>
               <div class="flex flex-wrap gap-2">
-                <button type="button" class="tone-btn active px-3 py-1.5 rounded-lg border text-xs font-medium bg-purple-600 text-white border-purple-500 transition-all" data-tone="energético">
-                  ⚡ Energético
+                <button type="button" data-i18n="tone_energetic" class="tone-btn active px-3 py-1.5 rounded-lg border text-xs font-medium bg-purple-600 text-white border-purple-500 transition-all" data-tone="energético">
+                  ⚡ Energetic
                 </button>
-                <button type="button" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="cálido">
-                  ☕ Cálido
+                <button type="button" data-i18n="tone_warm" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="cálido">
+                  ☕ Warm
                 </button>
-                <button type="button" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="profesional">
-                  💼 Profesional
+                <button type="button" data-i18n="tone_professional" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="profesional">
+                  💼 Professional
                 </button>
-                <button type="button" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="divertido">
-                  🎉 Divertido
+                <button type="button" data-i18n="tone_fun" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="divertido">
+                  🎉 Fun
                 </button>
-                <button type="button" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="urgente">
-                  🔥 Urgente
+                <button type="button" data-i18n="tone_urgent" class="tone-btn px-3 py-1.5 rounded-lg border text-xs font-medium bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 transition-all" data-tone="urgente">
+                  🔥 Urgent
                 </button>
               </div>
             </div>
 
-            <!-- Idioma & Duración -->
+            <!-- Language & Duration -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-2">Idioma</label>
+                <label data-i18n="label_lang" class="block text-xs font-semibold text-slate-300 mb-2">Ad Spoken Language</label>
                 <div class="flex gap-4">
                   <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-200">
-                    <input type="radio" name="language" value="es" checked class="text-purple-600 focus:ring-purple-500">
-                    <span>🇪🇸 Español</span>
+                    <input type="radio" name="language" value="en" checked class="text-purple-600 focus:ring-purple-500">
+                    <span data-i18n="lang_en">🇺🇸 English</span>
                   </label>
                   <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-200">
-                    <input type="radio" name="language" value="en" class="text-purple-600 focus:ring-purple-500">
-                    <span>🇺🇸 English</span>
+                    <input type="radio" name="language" value="es" class="text-purple-600 focus:ring-purple-500">
+                    <span data-i18n="lang_es">🇪🇸 Spanish</span>
                   </label>
                 </div>
               </div>
 
               <div>
                 <div class="flex justify-between items-center mb-1">
-                  <label for="duration_seconds" class="text-xs font-semibold text-slate-300">Duración Objetivo</label>
-                  <span id="duration-label" class="text-xs text-purple-400 font-mono font-medium">30s (~75 palabras)</span>
+                  <label for="duration_seconds" data-i18n="label_duration" class="text-xs font-semibold text-slate-300">Target Duration</label>
+                  <span id="duration-label" class="text-xs text-purple-400 font-mono font-medium">30s (~75 words)</span>
                 </div>
                 <input type="range" id="duration_seconds" name="duration_seconds" min="15" max="60" step="15" value="30"
                   class="w-full accent-purple-500 bg-slate-800 rounded-lg cursor-pointer">
               </div>
             </div>
 
-            <!-- Locutor & Cama Musical -->
+            <!-- Voice & Music Bed -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label for="voice_id" class="block text-xs font-semibold text-slate-300 mb-1">Voz del Locutor (ElevenLabs)</label>
+                <label for="voice_id" data-i18n="label_voice" class="block text-xs font-semibold text-slate-300 mb-1">Voice Talent (ElevenLabs)</label>
                 <select id="voice_id" name="voice_id"
                   class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all">
-                  <option value="">Cargando catálogo de voces...</option>
+                  <option value="" data-i18n="voice_loading">Loading voice catalog...</option>
                 </select>
               </div>
 
               <div>
-                <label for="music_track" class="block text-xs font-semibold text-slate-300 mb-1">Cama Musical de Fondo (FFmpeg Mix)</label>
+                <label for="music_track" data-i18n="label_music" class="block text-xs font-semibold text-slate-300 mb-1">Background Music Bed (FFmpeg Mix)</label>
                 <select id="music_track" name="music_track"
                   class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all">
-                  <option value="upbeat_commercial" selected>⚡ Upbeat Commercial (Alegre, 110 BPM)</option>
-                  <option value="chill_acoustic">☕ Chill Acoustic (Cálido y Relajante, 75 BPM)</option>
-                  <option value="urban_energy">🔥 Urban Energy (Rítmico y Dinámico, 120 BPM)</option>
-                  <option value="none">Sin música (Solo voz limpia)</option>
+                  <option value="upbeat_commercial" selected data-i18n="track_upbeat">⚡ Upbeat Commercial (Bright & Cheerful, 110 BPM)</option>
+                  <option value="chill_acoustic" data-i18n="track_chill">☕ Chill Acoustic (Warm & Relaxing, 75 BPM)</option>
+                  <option value="urban_energy" data-i18n="track_urban">🔥 Urban Energy (Rhythmic & Modern, 120 BPM)</option>
+                  <option value="none" data-i18n="track_none">No music (Clean voice only)</option>
                 </select>
               </div>
             </div>
@@ -206,17 +220,17 @@
           <div class="pt-2">
             <button type="submit" id="generate-btn"
               class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 transition-all transform active:scale-[0.99]">
-              <span>🎙️ Generar Cuña Publicitaria Completa</span>
+              <span data-i18n="btn_generate">🎙️ Generate Complete Audio Ad Spot</span>
             </button>
             <p class="text-center text-[11px] text-slate-400 mt-2.5 leading-relaxed">
-              ⚖️ <em>Para comercializar o vender estos spots a clientes requieres al menos el plan <strong>Starter ($6/mes)</strong> de ElevenLabs con tu propia API key.</em>
-              <a href="https://github.com/your-username/spotforge#uso-comercial-y-licencias" target="_blank" class="underline text-purple-400 hover:text-purple-300 ml-1">Más info sobre licencias</a>
+              <span data-i18n="legal_disclaimer">⚖️ Commercial resale or paid ad distribution requires at least the ElevenLabs Starter Plan ($6/mo) with your own API key.</span>
+              <a href="https://github.com/your-username/spotforge#commercial-use--licensing" target="_blank" data-i18n="link_licensing" class="underline text-purple-400 hover:text-purple-300 ml-1">Licensing info</a>
             </p>
           </div>
         </form>
       </div>
 
-      <!-- Columna Derecha: Resultado & Reproductor (5 columnas) -->
+      <!-- Right Column: Result & Player (5 cols) -->
       <div class="lg:col-span-5 space-y-6">
         
         <!-- Loading Indicator -->
@@ -229,11 +243,11 @@
             <div class="bar"></div>
             <div class="bar"></div>
           </div>
-          <p id="loading-text" class="text-sm font-medium text-purple-300 animate-pulse">
-            Gemma redactando guión, normalizando números y ElevenLabs produciendo audio...
+          <p id="loading-text" data-i18n="loading_title" class="text-sm font-medium text-purple-300 animate-pulse">
+            Gemma drafting script, normalizing text, and ElevenLabs producing audio...
           </p>
-          <p class="text-xs text-slate-500">
-            Control de duración real y mezcla de fondo con FFmpeg
+          <p data-i18n="loading_sub" class="text-xs text-slate-500">
+            Real duration calibration and background mixing via FFmpeg
           </p>
         </div>
 
@@ -242,14 +256,14 @@
           <div class="w-16 h-16 rounded-2xl bg-purple-950/50 border border-purple-800/40 text-purple-400 mx-auto flex items-center justify-center text-3xl">
             📻
           </div>
-          <h3 class="text-base font-bold text-slate-200">Tu Estudio de Audio Publicitario</h3>
-          <p class="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
-            Ingresa los 3 datos de tu cliente a la izquierda. En segundos tendrás un spot de audio profesional con música de locución natural listo para pautar.
+          <h3 data-i18n="empty_title" class="text-base font-bold text-slate-200">Your Commercial Audio Studio</h3>
+          <p data-i18n="empty_desc" class="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+            Enter your client's 3 details on the left. In seconds, you'll receive a broadcast-ready audio commercial with musical accompaniment.
           </p>
           <div class="pt-4 flex justify-center gap-2 text-[11px] text-slate-400">
-            <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">Stories IG</span>
-            <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">TikTok Ads</span>
-            <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">Radio Local</span>
+            <span data-i18n="badge_stories" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">Instagram Stories</span>
+            <span data-i18n="badge_tiktok" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">TikTok Ads</span>
+            <span data-i18n="badge_radio" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">Local Radio</span>
           </div>
         </div>
 
@@ -259,34 +273,34 @@
             <div>
               <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                Spot Generado con Éxito
+                <span data-i18n="badge_success">Spot Successfully Generated</span>
               </span>
-              <h3 class="text-base font-bold text-white mt-0.5">Vista Previa de Locución y Mezcla</h3>
+              <h3 data-i18n="result_title" class="text-base font-bold text-white mt-0.5">Voiceover & Mix Preview</h3>
             </div>
             <button id="copy-script-btn" class="text-xs text-slate-400 hover:text-white px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 transition-colors flex items-center gap-1">
-              <span>📋 Copiar</span>
+              <span data-i18n="btn_copy">📋 Copy</span>
             </button>
           </div>
 
-          <!-- Non-blocking Warnings -->
+          <!-- Non-blocking Warnings Container -->
           <div id="result-warnings" class="hidden p-3 rounded-xl bg-amber-950/60 border border-amber-800 text-amber-200 text-xs space-y-1"></div>
 
           <!-- Metrics Pills -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
             <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
-              <span class="text-[10px] uppercase text-slate-400 font-semibold block">Duración Real</span>
+              <span data-i18n="metric_duration" class="text-[10px] uppercase text-slate-400 font-semibold block">Real Duration</span>
               <span id="metric-duration" class="text-xs font-bold text-emerald-400 font-mono">--</span>
             </div>
             <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
-              <span class="text-[10px] uppercase text-slate-400 font-semibold block">Palabras</span>
+              <span data-i18n="metric_words" class="text-[10px] uppercase text-slate-400 font-semibold block">Words</span>
               <span id="metric-words" class="text-xs font-bold text-white font-mono">--</span>
             </div>
             <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
-              <span class="text-[10px] uppercase text-slate-400 font-semibold block">Caracteres TTS</span>
+              <span data-i18n="metric_chars" class="text-[10px] uppercase text-slate-400 font-semibold block">TTS Chars</span>
               <span id="metric-chars" class="text-xs font-bold text-amber-300 font-mono">--</span>
             </div>
             <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
-              <span class="text-[10px] uppercase text-slate-400 font-semibold block">Locutor</span>
+              <span data-i18n="metric_voice" class="text-[10px] uppercase text-slate-400 font-semibold block">Voice Talent</span>
               <span id="metric-voice" class="text-[11px] font-bold text-purple-300 truncate block">Rachel</span>
             </div>
           </div>
@@ -294,10 +308,10 @@
           <!-- Editable Script Output -->
           <div>
             <div class="flex justify-between items-center mb-1">
-              <label for="script-output" class="text-xs font-semibold text-slate-300">
-                Guión Publicitario (Editable)
+              <label for="script-output" data-i18n="label_script" class="text-xs font-semibold text-slate-300">
+                Audio Script (Editable)
               </label>
-              <span class="text-[11px] text-slate-500">Puedes retocarlo antes de regenerar</span>
+              <span data-i18n="script_hint" class="text-[11px] text-slate-500">You can tweak before regenerating</span>
             </div>
             <textarea id="script-output" rows="4"
               class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3.5 text-sm text-slate-200 leading-relaxed focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all font-sans"></textarea>
@@ -306,11 +320,11 @@
           <!-- Native Audio Player -->
           <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
             <div class="flex items-center justify-between text-xs text-slate-400">
-              <span class="font-medium text-slate-300">🎧 Reproductor de Audio HD (Voz + Música)</span>
+              <span data-i18n="player_title" class="font-medium text-slate-300">🎧 HD Audio Player (Voice + Music)</span>
               <span class="text-[11px] text-purple-400">MP3 44.1kHz • 128kbps</span>
             </div>
             <audio id="audio-player" controls class="w-full h-10 rounded-lg">
-              Tu navegador no soporta el reproductor de audio.
+              Your browser does not support the audio element.
             </audio>
           </div>
 
@@ -318,11 +332,11 @@
           <div class="flex flex-col sm:flex-row gap-3">
             <a id="download-btn" href="#" download="spot.mp3"
               class="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all">
-              <span>📥 Descargar MP3 Broadcast</span>
+              <span data-i18n="btn_download">📥 Download Broadcast MP3</span>
             </a>
             <button id="regenerate-voice-btn"
               class="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-all flex items-center justify-center gap-1.5">
-              <span>🔄 Sintetizar Cambios</span>
+              <span data-i18n="btn_resynth">🔄 Synthesize Changes</span>
             </button>
           </div>
         </div>
@@ -335,7 +349,7 @@
   <footer class="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
       <div>
-        <strong>SpotForge</strong> • Construido para el <span class="text-slate-300">Hacktoberfest 2026: Side Hustle Challenge</span>
+        <strong data-i18n="footer_credit">SpotForge • Built for the Hacktoberfest 2026: Side Hustle Challenge</strong>
       </div>
       <div class="flex items-center gap-4 text-slate-400">
         <span>Gemma 4 Open-Weights</span>
@@ -349,6 +363,7 @@
     </div>
   </footer>
 
+  <script src="/static/js/i18n.js"></script>
   <script src="/static/js/app.js"></script>
 </body>
 </html>

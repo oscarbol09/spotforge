@@ -1,4 +1,4 @@
-// SpotForge Frontend Application Logic
+// SpotForge Frontend Application Logic with i18n support
 
 document.addEventListener("DOMContentLoaded", () => {
   // Elements
@@ -26,44 +26,62 @@ document.addEventListener("DOMContentLoaded", () => {
   const musicSelect = document.getElementById("music_track");
   const resultWarnings = document.getElementById("result-warnings");
 
+  const btnLangEn = document.getElementById("lang-btn-en");
+  const btnLangEs = document.getElementById("lang-btn-es");
+
   let currentSpotData = null;
 
-  // 1. Update duration slider label
-  const updateDurationLabel = () => {
+  // 1. Language switcher bindings
+  if (btnLangEn) {
+    btnLangEn.addEventListener("click", () => {
+      if (window.spotforgeI18n) window.spotforgeI18n.setLanguage("en");
+    });
+  }
+  if (btnLangEs) {
+    btnLangEs.addEventListener("click", () => {
+      if (window.spotforgeI18n) window.spotforgeI18n.setLanguage("es");
+    });
+  }
+
+  // 2. Update duration slider label
+  window.updateDurationLabel = () => {
+    if (!durationSlider || !durationLabel) return;
     const val = durationSlider.value;
     const estWords = Math.round(val * 2.5);
-    durationLabel.textContent = `${val}s (Aprox. ${estWords} palabras)`;
+    const hint = window.spotforgeI18n
+      ? window.spotforgeI18n.t("duration_slider_hint", { words: estWords })
+      : `s (~${estWords} words)`;
+    durationLabel.textContent = `${val}${hint}`;
   };
-  durationSlider.addEventListener("input", updateDurationLabel);
-  updateDurationLabel();
+  durationSlider.addEventListener("input", window.updateDurationLabel);
 
-  // 2. Load voices from API
+  // 3. Load voices from API
   async function loadVoices() {
     try {
       const res = await fetch("/api/voices");
-      if (!res.ok) throw new Error("Error al obtener catálogo de voces");
+      if (!res.ok) throw new Error("Could not fetch voice catalog");
       const data = await res.json();
       voiceSelect.innerHTML = "";
       data.voices.forEach((v) => {
         const opt = document.createElement("option");
         opt.value = v.voice_id;
-        opt.textContent = `${v.name} (${v.category || "comercial"})`;
+        opt.textContent = `${v.name} (${v.category || "commercial"})`;
         voiceSelect.appendChild(opt);
       });
     } catch (err) {
       console.warn("Could not load dynamic voices:", err);
       // Fallback options
       voiceSelect.innerHTML = `
-        <option value="JBFqnCBsd6RMkjVDRZzb">Rachel — Comercial & Confidente</option>
-        <option value="pNInz6obpgDQGcFmaJgB">Adam — Corporativo & Cálido</option>
-        <option value="ErXwobaYiN019PkySvjV">Antoni — Enérgico & Ofertas</option>
-        <option value="EXAVITQu4vr4xnSDxMaL">Bella — Fresca & Cercana</option>
+        <option value="JBFqnCBsd6RMkjVDRZzb">Rachel — Commercial & Confident</option>
+        <option value="pNInz6obpgDQGcFmaJgB">Adam — Corporate & Warm</option>
+        <option value="ErXwobaYiN019PkySvjV">Antoni — Energetic & Promos</option>
+        <option value="EXAVITQu4vr4xnSDxMaL">Bella — Fresh & Approachable</option>
       `;
     }
   }
   loadVoices();
 
-  // 3. Tone Selector pills
+  // 4. Tone Selector pills
   const toneButtons = document.querySelectorAll(".tone-btn");
   let selectedTone = "energético";
   toneButtons.forEach((btn) => {
@@ -76,13 +94,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 4. Form Submission
+  // 5. Form Submission
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     hideError();
 
     const selectedTrack = musicSelect ? musicSelect.value : "upbeat_commercial";
     const useMusic = selectedTrack !== "none";
+    const t = window.spotforgeI18n ? window.spotforgeI18n.t : (k) => k;
 
     const payload = {
       business_name: document.getElementById("business_name").value.trim(),
@@ -90,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
       offer: document.getElementById("offer").value.trim(),
       call_to_action: document.getElementById("call_to_action").value.trim(),
       tone: selectedTone,
-      language: document.querySelector('input[name="language"]:checked')?.value || "es",
+      language: document.querySelector('input[name="language"]:checked')?.value || "en",
       duration_seconds: parseInt(durationSlider.value, 10),
       voice_id: voiceSelect.value || null,
       music: useMusic,
@@ -98,11 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (!payload.business_name || !payload.offer || !payload.call_to_action) {
-      showError("Por favor completa todos los campos requeridos del negocio.");
+      showError(t("error_empty_fields"));
       return;
     }
 
-    startLoading("Gemma redactando guión, normalizando texto y ElevenLabs produciendo audio con música...");
+    startLoading(t("loading_title"));
 
     try {
       const res = await fetch("/api/generate", {
@@ -113,40 +132,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.detail || `Error en el servidor: HTTP ${res.status}`);
+        throw new Error(errorData.detail || `Server error: HTTP ${res.status}`);
       }
 
       const data = await res.json();
       displayResult(data);
     } catch (err) {
-      showError(err.message || "Ocurrió un error inesperado al generar el spot.");
+      showError(err.message || "An unexpected error occurred while generating the audio spot.");
     } finally {
       stopLoading();
     }
   });
 
-  // 5. Regenerate voice only (using modified script text)
+  // 6. Regenerate voice only (using modified script text)
   regenerateVoiceBtn.addEventListener("click", async () => {
     if (!currentSpotData) return;
     const modifiedScript = scriptTextarea.value.trim();
+    const t = window.spotforgeI18n ? window.spotforgeI18n.t : (k) => k;
+
     if (!modifiedScript) {
-      showError("El guión no puede estar vacío para regenerar.");
+      showError(t("error_empty_script"));
       return;
     }
 
     const selectedTrack = musicSelect ? musicSelect.value : "upbeat_commercial";
     const useMusic = selectedTrack !== "none";
 
-    startLoading("ElevenLabs sintetizando audio con el guión editado y mezclando...");
+    startLoading(t("loading_regenerate"));
 
     const payload = {
-      business_name: document.getElementById("business_name").value.trim() || "Spot Personalizado",
-      business_type: document.getElementById("business_type").value.trim() || "comercial",
-      offer: document.getElementById("offer").value.trim() || "oferta",
-      call_to_action: document.getElementById("call_to_action").value.trim() || "acción",
+      business_name: document.getElementById("business_name").value.trim() || "Custom Spot",
+      business_type: document.getElementById("business_type").value.trim() || "commercial",
+      offer: document.getElementById("offer").value.trim() || "offer",
+      call_to_action: document.getElementById("call_to_action").value.trim() || "action",
       custom_script: modifiedScript,
       voice_id: voiceSelect.value || null,
-      language: document.querySelector('input[name="language"]:checked')?.value || "es",
+      language: document.querySelector('input[name="language"]:checked')?.value || "en",
       duration_seconds: parseInt(durationSlider.value, 10),
       music: useMusic,
       music_track: useMusic ? selectedTrack : null,
@@ -161,24 +182,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.detail || `Error al regenerar: HTTP ${res.status}`);
+        throw new Error(errorData.detail || `Error regenerating: HTTP ${res.status}`);
       }
 
       const data = await res.json();
       displayResult(data);
     } catch (err) {
-      showError(err.message || "Error al regenerar el audio.");
+      showError(err.message || "Error while regenerating speech audio.");
     } finally {
       stopLoading();
     }
   });
 
-  // 6. Copy Script Button
+  // 7. Copy Script Button
   copyScriptBtn.addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(scriptTextarea.value);
       const originalText = copyScriptBtn.innerHTML;
-      copyScriptBtn.innerHTML = `<span>✓ ¡Copiado!</span>`;
+      const copiedText = window.spotforgeI18n ? window.spotforgeI18n.t("btn_copied") : "✓ Copied!";
+      copyScriptBtn.innerHTML = `<span>${copiedText}</span>`;
       setTimeout(() => {
         copyScriptBtn.innerHTML = originalText;
       }, 2000);
@@ -193,13 +215,15 @@ document.addEventListener("DOMContentLoaded", () => {
     emptyState.classList.add("hidden");
     resultCard.classList.remove("hidden");
 
+    const t = window.spotforgeI18n ? window.spotforgeI18n.t : (k) => k;
+
     scriptTextarea.value = data.script;
     metricDuration.textContent = `${data.duration_seconds}s`;
-    metricWords.textContent = `${data.word_count} palabras`;
+    metricWords.textContent = `${data.word_count} ${t("metric_words").toLowerCase()}`;
     if (metricChars) {
       metricChars.textContent = data.characters_used ? `${data.characters_used}` : "--";
     }
-    metricVoice.textContent = data.voice_used || voiceSelect.options[voiceSelect.selectedIndex]?.text.split("—")[0].trim() || "Locutor";
+    metricVoice.textContent = data.voice_used || voiceSelect.options[voiceSelect.selectedIndex]?.text.split("—")[0].trim() || "Voice";
 
     // Handle warnings if present
     if (resultWarnings) {
@@ -252,5 +276,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function hideError() {
     errorBanner.classList.add("hidden");
     errorMessage.textContent = "";
+  }
+
+  // 8. Initialize language on page load
+  if (window.spotforgeI18n) {
+    window.spotforgeI18n.setLanguage(window.spotforgeI18n.getCurrentLanguage());
+  } else {
+    window.updateDurationLabel();
   }
 });

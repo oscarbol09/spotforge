@@ -1,19 +1,19 @@
-# ADR-006: Mezcla Profesional de Cama Musical de Fondo con FFmpeg
+# ADR-006: Professional Background Musical Bed Mixing with FFmpeg
 
-## Estado
-Aceptado
+## Status
+Accepted
 
-## Contexto
-Una cuña publicitaria con solo voz a capella suena como un mensaje de voz o dictado informal. Los anuncios profesionales de radio y redes sociales siempre cuentan con una cama musical (*music bed*) que evoca la emoción adecuada y mantiene al oyente enganchado.
+## Context
+A voiceover ad without background music sounds like an informal voice memo rather than a polished commercial. Professional radio and digital video ads invariably incorporate a musical bed that establishes brand mood, maintains listener attention, and increases ad recall.
 
-## Decisión
-Integrar un servicio de mezcla de audio (`app.services.audio_mixer`) apoyado en **FFmpeg**:
-1. **Looping infinito del track**: `-stream_loop -1` para que cualquier duración sea cubierta sin cortes.
-2. **Atenuación de volumen (*ducking*)**: La música de fondo se reduce al 15% (`volume=0.15`) para priorizar la inteligibilidad vocal.
-3. **Corte a la duración de la voz**: `amix=inputs=2:duration=first`.
-4. **Fundido de salida (*fade out*)**: 2 segundos de `afade=t=out` al final del audio para un remate suave y profesional.
-5. **Degradación elegante**: Si FFmpeg no estuviera instalado en el entorno, el sistema devuelve la voz limpia con un warning descriptivo no bloqueante.
+## Decision
+Integrate a multimedia audio mixing service (`app.services.audio_mixer`) powered by **FFmpeg**:
+1. **Seamless Loop**: `-stream_loop -1` to cover any custom script duration smoothly.
+2. **Dynamic Volume Ducking**: Lowers background music to 15% (`volume=0.15`) so the voiceover remains crisp, clear, and prominent.
+3. **Voice Duration Matching**: `amix=inputs=2:duration=first` to truncate the musical bed exactly when speech finishes.
+4. **Smooth Fadeout**: 2-second gentle tail fade (`afade=t=out`) for a polished broadcast transition.
+5. **Graceful Degradation**: If FFmpeg is unavailable in the execution environment, SpotForge gracefully returns the clean voiceover along with an informative non-blocking warning.
 
-## Consecuencias
-- **Positivas**: Acabado de producción de radio comercial en segundos.
-- **Trade-offs**: Requiere el binario `ffmpeg` instalado en el sistema operativo.
+## Consequences
+- **Positive**: Broadcast radio-grade audio production generated within seconds.
+- **Trade-offs**: Requires the `ffmpeg` binary installed on the host system or container.

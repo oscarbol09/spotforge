@@ -1,19 +1,19 @@
-# ADR-004: Capa Determinista de Normalización de Texto para TTS
+# ADR-004: Deterministic Phonetic Text Normalization Layer for TTS
 
-## Estado
-Aceptado
+## Status
+Accepted
 
-## Contexto
-Los modelos de Text-To-Speech fallan frecuentemente al pronunciar cifras complejas, promociones comerciales (como "2x1"), porcentajes ("30%"), monedas ("$15") y números telefónicos ("555-0199"), pronunciándolos de forma antinatural o ininteligible en audio publicitario.
+## Context
+Text-to-speech engines frequently stumble over commercial terminology, promo multipliers (e.g., "2x1" or "2 for 1"), percentages ("30%"), currencies ("$15"), and telephone numbers ("555-0199"), often pronouncing them awkwardly or unintelligibly in fast-paced commercial audio.
 
-## Decisión
-Implementar un servicio determinista de preprocesamiento fonético (`app.services.text_normalizer`) basado en expresiones regulares y `num2words` antes de enviar el guión a ElevenLabs:
-1. Multiplicadores promocionales: `2x1` -> "dos por uno".
-2. Monedas: `$15` -> "quince dólares".
-3. Porcentajes: `30%` -> "treinta por ciento".
-4. Teléfonos: `555-0192` -> "cinco, cinco, cinco, cero, uno, nueve, dos" (con pausas de respiración).
-5. Números sueltos: `2026` -> "dos mil veintiséis".
+## Decision
+Implement a deterministic phonetic pre-processing service (`app.services.text_normalizer`) based on regex pattern matching and `num2words` before passing the script to ElevenLabs:
+1. Promo multipliers: `2x1` ➔ "dos por uno" (ES) or "two for one" (EN).
+2. Currencies: `$15` ➔ "quince dólares" (ES) or "fifteen dollars" (EN).
+3. Percentages: `30%` ➔ "treinta por ciento" (ES) or "thirty percent" (EN).
+4. Phone numbers: `555-0192` ➔ "cinco, cinco, cinco, cero, uno, nueve, dos" (ES) with comma pauses to induce natural breathing pauses and ensure listener recall.
+5. Standalone integers: `2026` ➔ "dos mil veintiséis" (ES) or "two thousand and twenty-six" (EN).
 
-## Consecuencias
-- **Positivas**: 100% de inteligibilidad en las llamadas a la acción y ofertas críticas.
-- **Trade-offs**: Añade un paso de normalización en milisegundos en el backend.
+## Consequences
+- **Positive**: 100% clarity and precision in business offers and critical calls to action.
+- **Trade-offs**: Adds a negligible sub-millisecond string transformation step in the backend pipeline.

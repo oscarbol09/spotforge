@@ -1,17 +1,17 @@
-# ADR-001: Adopción de Google Gemma 4 como Redactor Publicitario de Pesos Abiertos
+# ADR-001: Adoption of Google Gemma 4 as Open-Weight Ad Copywriter
 
-## Estado
-Aceptado
+## Status
+Accepted
 
-## Contexto
-SpotForge requiere generar guiones publicitarios de 15, 30 y 60 segundos con estructura persuasiva AIDA (Atención, Interés, Deseo, Acción) y cadencia estricta de locución (~2.5 palabras por segundo). Utilizar modelos propietarios de caja negra implicaría costos recurrentes por token, dependencia de tarifas cerradas y riesgo de vendor lock-in para un freelance que construye su Side Hustle.
+## Context
+SpotForge requires generating 15, 30, and 60-second commercial ad scripts structured around the persuasive AIDA framework (Attention, Interest, Desire, Action) and constrained to strict speech pacing (~2.5 words/second in Spanish, ~2.8 words/second in English). Relying on closed proprietary LLM APIs introduces ongoing per-token markups, subscription dependencies, and vendor lock-in risks for solo digital marketing freelancers building a sustainable Side Hustle.
 
-## Decisión
-Adoptar la familia de modelos de pesos abiertos **Google Gemma 4** (`gemma-4-26b-a4b-it` con fallback a `gemma-4-31b-it`).
-1. **Prompt unificado sin `system_instruction`**: Diseñado en un solo mensaje para total compatibilidad con la API de Google AI Studio y backends locales.
-2. **Filtrado de tokens de pensamiento**: Gemma 4 incluye razonamiento explícito (`part.thought == True`); implementamos extracción quirúrgica para enviar únicamente el copy hablado a TTS.
-3. **Abstracción `BaseLLMBackend`**: Soporta ejecución en la nube (Google AI Studio) o 100% offline local vía Ollama (`ollama run gemma`).
+## Decision
+Adopt the **Google Gemma 4** open-weight model family (`gemma-4-26b-a4b-it` with automatic fallback to `gemma-4-31b-it`).
+1. **Unified Prompt without `system_instruction`**: Structured as a single message to ensure 100% compatibility across both Google AI Studio API and local runtime backends.
+2. **Thought Tokens Extraction**: Gemma 4 emits internal reasoning traces (`part.thought == True`); we implemented surgical filtering to send only clean, spoken commercial copy to the TTS engine.
+3. **`BaseLLMBackend` Abstraction**: Supports seamless execution in the cloud via Google AI Studio or 100% offline local inference via Ollama (`ollama run gemma`).
 
-## Consecuencias
-- **Positivas**: Costo de redacción prácticamente $0 por spot. Control total sobre los pesos del modelo. Privacidad garantizada para negocios locales si se ejecuta en Ollama.
-- **Trade-offs**: Requiere sanitización de indicaciones entre corchetes o paréntesis antes de pasar el texto al motor de síntesis de voz.
+## Consequences
+- **Positive**: Script copywriting cost is virtually $0 per ad. Full transparency and model weight ownership. Total client data privacy when running locally via Ollama.
+- **Trade-offs**: Requires input sanitization to strip bracketed production cues (`[music]`) or parentheticals before speech synthesis.
