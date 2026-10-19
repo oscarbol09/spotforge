@@ -32,6 +32,12 @@ def test_health_check_endpoint():
     assert "ffmpeg_available" in data
 
 
+def test_favicon_endpoint():
+    response = client.get("/favicon.ico")
+    assert response.status_code == 200
+    assert "image" in response.headers.get("content-type", "")
+
+
 def test_get_music_tracks_endpoint():
     response = client.get("/api/music")
     assert response.status_code == 200

@@ -88,6 +88,15 @@ async def health_check() -> HealthResponse:
     )
 
 
+@app.get("/favicon.ico", include_in_schema=False)
+async def serve_favicon():
+    """Serve favicon.ico to prevent 404s on browser requests."""
+    ico_path = Path("static/favicon.ico")
+    if ico_path.exists():
+        return FileResponse(ico_path, media_type="image/x-icon")
+    return FileResponse(Path("static/favicon.png"), media_type="image/png")
+
+
 @app.get("/", tags=["Frontend"])
 async def serve_index():
     """Serve single-page frontend application."""

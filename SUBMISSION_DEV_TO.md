@@ -99,7 +99,7 @@ The entire codebase is open-source under the MIT License:
 - **Audio Mixer**: Subprocess FFmpeg blending with loop, ducking, and fadeout.
 - **Rate Limiter**: Sliding-window IP limiter protecting public demo quotas.
 - **Storage TTL**: Automatic 24-hour cleanup of temporary files while preserving permanent demo assets.
-- **Comprehensive Test Suite**: 29 automated unit and contract tests in `pytest`.
+- **Comprehensive Test Suite**: 30 automated unit and contract tests in `pytest`.
 - **Architecture Decision Records**: 7 formal ADRs in `docs/adr/`.
 - **Docker & Render Blueprint**: Hermetic `Dockerfile` with FFmpeg and `render.yaml` zero-downtime health checking.
 
@@ -164,7 +164,7 @@ To maintain full engineering transparency:
 SpotForge was designed, tested, and implemented in collaboration with Google Antigravity, employing autonomous pair-programming workflows, Test-Driven Development (TDD), and continuous verification:
 
 - **Formal Architectural Scaffolding**: Decomposed the pipeline into 7 formal Architectural Decision Records (ADRs in `docs/adr/`), isolating open-weight copywriting, deterministic phonetic preprocessing, and audio DSP into deep, decoupled modules.
-- **Test-Driven Rigor (TDD)**: Authored 29 automated contract and unit tests in `pytest` verifying prompt generation, speech cadence mathematics, phonetic regex expansions, sliding-window rate limiting, and audio synthesis fault tolerance prior to final integration.
+- **Test-Driven Rigor (TDD)**: Authored 30 automated contract and unit tests in `pytest` verifying prompt generation, speech cadence mathematics, phonetic regex expansions, sliding-window rate limiting, and audio synthesis fault tolerance prior to final integration.
 - **Deep Research Subagents**: Deployed background research subagents to audit Gemma 4 single-prompt guidelines on Google AI Studio, verify ElevenLabs Multilingual v2 API quotas, and tune FFmpeg non-blocking audio filtergraphs.
 
 ---
