@@ -3,8 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SpotForge — Commercial Audio Ad Generator</title>
-  
+  <title>SpotForge — Commercial Audio Ad Generator for Local Businesses</title>
+  <meta name="description" content="Turn 3 facts about any local store into a broadcast-ready 30-second audio ad with Google Gemma 4 open weights, ElevenLabs studio voiceover, and FFmpeg music mixing in seconds.">
+  <meta name="theme-color" content="#020617">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://spotforge.onrender.com/">
+  <meta property="og:title" content="SpotForge — Commercial Audio Ad Generator for Local Businesses">
+  <meta property="og:description" content="Turn 3 facts about any local store into a broadcast-ready 30-second audio ad with Gemma 4, studio voiceover, and CC0 music mixing in seconds.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/oscarbol09/spotforge/master/docs/cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://spotforge.onrender.com/">
+  <meta name="twitter:title" content="SpotForge — Commercial Audio Ad Generator for Local Businesses">
+  <meta name="twitter:description" content="Turn 3 facts about any local store into a broadcast-ready 30-second audio ad with Gemma 4, studio voiceover, and CC0 music mixing in seconds.">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/oscarbol09/spotforge/master/docs/cover.png">
+
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
   <link rel="alternate icon" type="image/x-icon" href="/favicon.ico">
@@ -367,19 +385,24 @@
 
   <!-- Footer -->
   <footer class="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <div>
-        <strong data-i18n="footer_credit">SpotForge • Built for the Hacktoberfest 2026: Side Hustle Challenge</strong>
+    <div class="max-w-7xl mx-auto px-4 flex flex-col items-center gap-3">
+      <div class="flex flex-col sm:flex-row items-center justify-between w-full gap-3">
+        <div>
+          <strong data-i18n="footer_credit">SpotForge • Built for the Hacktoberfest 2026: Side Hustle Challenge</strong>
+        </div>
+        <div class="flex items-center gap-4 text-slate-400 text-[11px]">
+          <span>Gemma 4 Open-Weights</span>
+          <span>•</span>
+          <span>ElevenLabs API</span>
+          <span>•</span>
+          <span>FFmpeg Audio Mixer</span>
+          <span>•</span>
+          <span>FastAPI</span>
+        </div>
       </div>
-      <div class="flex items-center gap-4 text-slate-400">
-        <span>Gemma 4 Open-Weights</span>
-        <span>•</span>
-        <span>ElevenLabs API</span>
-        <span>•</span>
-        <span>FFmpeg Audio Mixer</span>
-        <span>•</span>
-        <span>FastAPI</span>
-      </div>
+      <p data-i18n="footer_privacy" class="text-[11px] text-slate-500 max-w-2xl leading-relaxed">
+        Your text is processed by Google AI Studio and ElevenLabs. Generated audio is automatically deleted after 24 hours.
+      </p>
     </div>
   </footer>
 
