@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     music_dir: str = "static/music"
     audio_ttl_hours: int = 24
     enable_music_mixing: bool = True
+    rate_limit_enabled: bool = True
+    rate_limit_max_requests: int = 5
+    rate_limit_window_seconds: int = 300
 
     model_config = SettingsConfigDict(
         env_file=".env",

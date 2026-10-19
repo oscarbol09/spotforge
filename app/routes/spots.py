@@ -1,12 +1,13 @@
 """Route handlers for audio ad spot generation with real duration control and music mixing (v2)."""
 
 import logging
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from app.config import Settings, get_settings
 from app.models.schemas import SpotGenerateRequest, SpotGenerateResponse
 from app.services.audio_mixer import mix_voice_and_music
 from app.services.copywriter import CopywriterService, clean_script
+from app.services.rate_limiter import get_rate_limiter
 from app.services.storage import (
     cleanup_old_audio,
     generate_secure_spot_id,
@@ -21,6 +22,16 @@ router = APIRouter(prefix="/api/generate", tags=["Spots"])
 
 _copywriter_service: CopywriterService | None = None
 _voice_synth_service: VoiceSynthService | None = None
+
+
+def get_client_ip(request: Request) -> str:
+    """Extract client IP, taking proxy headers (X-Forwarded-For) into account."""
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    if request.client and request.client.host:
+        return request.client.host
+    return "127.0.0.1"
 
 
 def get_copywriter_service() -> CopywriterService:
@@ -42,11 +53,32 @@ def get_voice_synth_service() -> VoiceSynthService:
 @router.post("", response_model=SpotGenerateResponse)
 async def generate_audio_spot(
     request: SpotGenerateRequest,
+    http_request: Request,
     copywriter: CopywriterService = Depends(get_copywriter_service),
     voice_synth: VoiceSynthService = Depends(get_voice_synth_service),
     settings: Settings = Depends(get_settings),
 ) -> SpotGenerateResponse:
     """Generate a commercial ad spot using Gemma open-weights, text normalizer, ElevenLabs, and FFmpeg."""
+    # R11 / Defense: Sliding window rate limit check to protect API quotas on public deployments
+    if settings.rate_limit_enabled:
+        client_ip = get_client_ip(http_request)
+        limiter = get_rate_limiter(
+            max_requests=settings.rate_limit_max_requests,
+            window_seconds=settings.rate_limit_window_seconds,
+        )
+        allowed, retry_after = limiter.is_allowed(client_ip)
+        if not allowed:
+            logger.warning("Rate limit exceeded for IP %s (retry after %ds)", client_ip, retry_after)
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=(
+                    f"Rate limit exceeded: maximum {settings.rate_limit_max_requests} spot generations "
+                    f"per {settings.rate_limit_window_seconds // 60} minutes per IP. "
+                    f"Please try again in {retry_after} seconds, or run SpotForge locally with your own API key."
+                ),
+                headers={"Retry-After": str(retry_after)},
+            )
+
     spot_id = generate_secure_spot_id()
     warnings: list[str] = []
     audio_dir = settings.get_audio_dir()

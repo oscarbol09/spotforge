@@ -162,16 +162,23 @@ ENABLE_MUSIC_MIXING=true
 AUDIO_TTL_HOURS=24
 ```
 
-### 4. Run Development Server
+### 4. Run with Docker (Recommended for Containerized FFmpeg)
+```bash
+docker build -t spotforge .
+docker run -p 8000:8000 --env-file .env spotforge
+```
+
+### 5. Run Development Server Directly
 ```bash
 uvicorn main:app --reload --port 8000
 ```
 Open [http://localhost:8000](http://localhost:8000) in your browser.
 
-### 5. Run Automated Tests
+### 6. Run Automated Tests
 ```bash
 pytest -v
 ```
+All 29 tests covering copy generation, duration control, text normalization, voice synthesis, and rate limiting should pass.
 
 ---
 

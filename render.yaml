@@ -1,13 +1,13 @@
 services:
   - type: web
     name: spotforge
-    runtime: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    env: docker
+    dockerfilePath: Dockerfile
     healthCheckPath: /api/health
+    plan: free
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.12.10
+      - key: ENVIRONMENT
+        value: production
       - key: GEMINI_API_KEY
         sync: false
       - key: ELEVENLABS_API_KEY
@@ -18,3 +18,9 @@ services:
         value: CwhRBWXzGAHq8TQ4Fs17
       - key: DEFAULT_LANGUAGE
         value: es
+      - key: RATE_LIMIT_ENABLED
+        value: "true"
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: "5"
+      - key: RATE_LIMIT_WINDOW_SECONDS
+        value: "300"
