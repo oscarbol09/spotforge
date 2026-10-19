@@ -1,5 +1,5 @@
 ---
-title: "SpotForge 🎙️: Turn 3 Local Business Facts into a Broadcast Audio Ad with Gemma 4 & ElevenLabs"
+title: "SpotForge: Turn 3 Local Business Facts into a Commercial Audio Ad with Gemma 4 and ElevenLabs"
 published: false
 description: "Turn 3 facts about any local store into a broadcast-ready 30-second audio ad with open-weights Gemma 4, text normalization, ElevenLabs studio voice, and FFmpeg music mixing in seconds."
 tags: devchallenge, hf26challenge, hacktoberfest, ai
@@ -10,46 +10,46 @@ cover_image: https://raw.githubusercontent.com/oscarbol09/spotforge/master/docs/
 
 ---
 
-## 💡 What I Built
+## What I Built
 
 Every week, millions of small neighborhood businesses—pizzerias, dentists, barbers, auto repair shops, boutiques—struggle to stand out. They know that video stories, Instagram Reels, TikTok ads, and community radio are the fastest ways to drive local foot traffic.
 
-There's just one huge barrier: **audio ad production is prohibitively expensive.**
+There is a major barrier: **commercial audio production is prohibitively expensive.**
 
 - **A traditional creative agency** charges between **\$300 and \$800 USD** for a single 30-second commercial script, studio booking, and voice talent.
-- **Freelance digital marketers** managing 5 to 10 local neighborhood clients can't justify paying hundreds of dollars just to promote a Tuesday pizza discount or a weekend oil change deal.
+- **Freelance digital marketers** managing 5 to 10 local neighborhood clients cannot justify paying hundreds of dollars just to promote a Tuesday pizza discount or a weekend oil change deal.
 - **Doing it themselves** results in amateur cellphone voice notes with background noise, hesitant pacing, and weak calls to action that listeners scroll past immediately.
 
-### The Solution: SpotForge 🎙️
+### The Solution: SpotForge
 
 **SpotForge** is an open-source, turnkey audio advertising studio designed specifically for freelancers, digital marketing consultants, and small business owners. It takes **3 simple facts** about a local business and produces a broadcast-ready, 30-second commercial ad spot in under 15 seconds:
 
 ```
-🏪 Business Facts ➔ 🧠 Gemma 4 (AIDA) ➔ 🔢 Text Normalizer ➔ 🎙️ ElevenLabs ➔ 🎚️ FFmpeg Music Bed ➔ 🎧 Broadcast MP3
+Business Facts -> Gemma 4 (AIDA) -> Text Normalizer -> ElevenLabs Voice -> FFmpeg Music Bed -> Broadcast MP3
 ```
 
-Here is what happens under the hood in seconds:
-1. **Enter 3 business facts**: Business Name, Core Offer, and Call-to-Action.
-2. **Select production parameters**: Commercial tone (⚡ Energetic, ☕ Warm, 💼 Professional, 🎉 Fun, 🔥 Urgent), Language (Spanish or English), Target Duration (15s, 30s, or 60s), Voice Talent, and Background Music Bed.
-3. **Open-Weight Intelligence (Google Gemma 4)**: Generates a persuasive ad script following the **AIDA formula** (Attention → Interest → Desire → Action) with strict audio pacing limits (~2.5 words/second).
-4. **Deterministic Text Normalization**: Converts tricky numbers, promo multipliers (`2x1` ➔ "dos por uno"), currencies (`$15` ➔ "quince dólares"), percentages (`30%` ➔ "treinta por ciento"), and phone numbers (`555-0192` ➔ "cinco, cinco, cinco, cero, uno, nueve, dos") into clear spoken words with natural breathing pauses.
-5. **Studio Voice Synthesis (ElevenLabs)**: Renders studio-quality, human-grade voiceover with tailored stability and similarity settings.
+Here is what happens under the hood:
+1. **Business Input**: Business Name, Core Offer, and Call-to-Action.
+2. **Production Parameters**: Commercial tone (Energetic, Warm, Professional, Fun, Urgent), Language (Spanish or English), Target Duration (15s, 30s, or 60s), Voice Talent, and Background Music Bed.
+3. **Open-Weight Intelligence (Google Gemma 4)**: Generates a persuasive ad script following the **AIDA formula** (Attention -> Interest -> Desire -> Action) with strict audio pacing limits (~2.5 words/second in Spanish, ~2.8 words/second in English).
+4. **Deterministic Text Normalization**: Converts tricky numbers, promo multipliers (`2x1` -> "two for one" / "dos por uno"), currencies (`$15` -> "fifteen dollars" / "quince dólares"), percentages (`30%` -> "thirty percent" / "treinta por ciento"), and phone numbers (`555-0192` -> "cinco, cinco, cinco, cero, uno, nueve, dos") into clear spoken words with natural breathing pauses.
+5. **Studio Voice Synthesis (ElevenLabs)**: Renders human-grade voiceover with tailored stability and similarity settings.
 6. **Real MP3 Duration Control**: Accurately measures the physical duration of the MP3 using `mutagen`. If the speech exceeds the target duration by more than 3 seconds, SpotForge automatically applies **1 adaptive retry** with a mathematically reduced word budget.
 7. **FFmpeg Musical Bed Mixing**: Blends the voiceover with a royalty-free CC0 musical track, applying 15% automatic background ducking, infinite track looping, and a smooth 2-second fadeout at the end.
 
 ---
 
-## 🎬 Real Audio Demos
+## Real Audio Demos
 
 Here are three authentic commercial spots generated end-to-end by SpotForge:
 
 | Client Business | Commercial Category | Voice Talent | Background Music | Real Duration | Audio File |
 |---|---|---|---|---|---|
-| **Pizzería Don Mario** | Wood-fired artisanal Italian pizzeria | Rachel | ⚡ Upbeat Commercial (110 BPM) | **28.4s** | [`demo_pizzeria.mp3`](https://github.com/oscarbol09/spotforge/raw/master/static/audio/demo_pizzeria.mp3) |
-| **Barbería El Bigote** | Classic executive men's grooming & hot towel | Antoni | 🔥 Urban Energy (120 BPM) | **35.0s** | [`demo_barber.mp3`](https://github.com/oscarbol09/spotforge/raw/master/static/audio/demo_barber.mp3) |
-| **Apex Auto Repair** | Multi-brand automotive mechanics & brake service | Adam | ☕ Chill Acoustic (75 BPM) | **36.8s** | [`demo_autorepair.mp3`](https://github.com/oscarbol09/spotforge/raw/master/static/audio/demo_autorepair.mp3) |
+| **Pizzería Don Mario** | Wood-fired artisanal Italian pizzeria | Rachel | Upbeat Commercial (110 BPM) | **28.4s** | [`demo_pizzeria.mp3`](https://github.com/oscarbol09/spotforge/raw/master/static/audio/demo_pizzeria.mp3) |
+| **Barbería El Bigote** | Classic executive men's grooming & hot towel | Antoni | Urban Energy (120 BPM) | **35.0s** | [`demo_barber.mp3`](https://github.com/oscarbol09/spotforge/raw/master/static/audio/demo_barber.mp3) |
+| **Apex Auto Repair** | Multi-brand automotive mechanics & brake service | Adam | Chill Acoustic (75 BPM) | **36.8s** | [`demo_autorepair.mp3`](https://github.com/oscarbol09/spotforge/raw/master/static/audio/demo_autorepair.mp3) |
 
-### Transcripts Generated Live by Gemma 4:
+### Transcripts Generated by Gemma 4:
 
 > **Pizzería Don Mario (28.4s)**:  
 > *"¿Buscas el auténtico sabor de la Italia artesanal? En Pizzería Don Mario, horneamos nuestra masa madre en horno de leña... para darte esa textura crujiente perfecta. ¡Atención! Los martes y jueves tenemos dos por uno en todas nuestras pizzas familiares y el envío es sin costo. ¡Pide ya en Pizzería Don Mario! Llama al cinco, cinco, cinco, cero, uno, nueve, dos, o por WhatsApp antes de las diez de la noche."*
@@ -59,9 +59,9 @@ Here are three authentic commercial spots generated end-to-end by SpotForge:
 
 ---
 
-## 💸 Side Hustle Economics: Pennies to Produce, 97%+ Gross Margin
+## Side Hustle Economics: Pennies to Produce, 97%+ Gross Margin
 
-Many AI projects claim "$0 cost forever" by glossing over commercial licensing realities. We believe the judging panel values **honest, real-world economics**:
+Many AI projects claim "$0 cost forever" by glossing over commercial licensing realities. We believe judges and engineers value **honest, real-world economics**:
 
 ### Commercial Licensing & BYOK
 - **ElevenLabs Free Plan**: Free tier audio does **not** include commercial rights and requires public attribution.
@@ -80,17 +80,17 @@ Many AI projects claim "$0 cost forever" by glossing over commercial licensing r
 | **Freelance Gross Margin** | N/A | **97.6% – 99.2%** |
 | **Spots Included in $6/mo** | 0 spots | **~75 spots of 30 seconds** |
 
-**The Side Hustle Playbook**: A solo freelancer offering social media management to local shops can include 2 fresh promo spots per week for an extra \$30/month per client. With just 5 clients, that's **\$150/month in revenue for \$6 in ElevenLabs costs and 30 minutes of total work**—a sustainable, high-margin side hustle.
+**The Side Hustle Playbook**: A solo freelancer offering social media management to local shops can include 2 fresh promo spots per week for an extra \$30/month per client. With just 5 clients, that is **\$150/month in revenue for \$6 in ElevenLabs costs and 30 minutes of total work**—a sustainable, high-margin side hustle.
 
 ---
 
-## 💻 Code
+## Code
 
 The entire codebase is open-source under the MIT License:
 
 {% github oscarbol09/spotforge %}
 
-- **Full FastAPI Backend**: Modular routers, Pydantic v2 validation, and async streaming.
+- **FastAPI Backend**: Modular routers, Pydantic v2 validation, and async streaming.
 - **Copywriter Engine**: Single-prompt Gemma 4 integration with thinking-tokens extraction.
 - **Text Normalizer**: Deterministic regex and `num2words` phone, percentage, currency, and promo converter.
 - **Audio Mixer**: Subprocess FFmpeg blending with loop, ducking, and fadeout.
@@ -101,7 +101,7 @@ The entire codebase is open-source under the MIT License:
 
 ---
 
-## 🛠️ How I Built It
+## How I Built It
 
 ### 1. Open-Weight Model Core: Google Gemma 4
 At the core of SpotForge is **Google Gemma 4** (`gemma-4-26b-a4b-it`). We specifically designed the engine to leverage open weights:
@@ -111,11 +111,11 @@ At the core of SpotForge is **Google Gemma 4** (`gemma-4-26b-a4b-it`). We specif
 - **Dual Cloud/Local Flexibility**: SpotForge implements `BaseLLMBackend`. It can query Google AI Studio or connect to a 100% offline local Ollama instance (`LLM_BACKEND=ollama`).
 
 ### 2. Deterministic Phonetic Normalizer
-TTS engines regularly butcher numbers: "2x1" is spoken as "dos equis uno" instead of "dos por uno"; "$15" is read as "dólares quince"; phone numbers are rattled off as single hundred-millions instead of digit-by-digit chunks.
+TTS engines regularly mispronounce numbers: "2x1" is spoken as "dos equis uno" instead of "dos por uno"; "$15" is read as "dólares quince"; phone numbers are rattled off as single numbers instead of digit-by-digit chunks.
 Our normalizer runs deterministic pre-processing:
-- Promos: `\b(\d+)\s*[xX]\s*(\d+)\b` ➔ "dos por uno"
-- Currency: `\$\s*(\d+)` ➔ "quince dólares"
-- Percentages: `(\d+)\s*%` ➔ "treinta por ciento"
+- Promos: `\b(\d+)\s*[xX]\s*(\d+)\b` -> "two for one" / "dos por uno"
+- Currency: `\$\s*(\d+)` -> "fifteen dollars" / "quince dólares"
+- Percentages: `(\d+)\s*%` -> "thirty percent" / "treinta por ciento"
 - Phone numbers: digits spaced with commas to induce natural, easy-to-write-down speech pauses.
 
 ### 3. ElevenLabs Studio Voiceover
@@ -130,7 +130,7 @@ Raw voiceover sounds like a phone dictation. SpotForge packages 3 curated CC0 pu
 
 ---
 
-## 🌍 Why Does Open Innovation Matter?
+## Why Open Innovation Matters
 
 Why build this with open-weight models (Gemma) instead of closed proprietary APIs?
 
@@ -141,7 +141,7 @@ Why build this with open-weight models (Gemma) instead of closed proprietary API
 
 ---
 
-## 👥 My First User: Testing with a Local Freelancer
+## My First User: Testing with a Local Freelancer
 
 Before wrapping up the challenge, I tested SpotForge with **Carlos M.**, an independent social media freelancer who manages Instagram accounts and local marketing for 4 neighborhood businesses (a pizzeria, a barber shop, an auto repair shop, and a coffee boutique).
 
@@ -152,7 +152,7 @@ Before wrapping up the challenge, I tested SpotForge with **Carlos M.**, an inde
 
 ---
 
-## 🏆 Prize Categories
+## Prize Categories
 
 SpotForge is competing in the following categories:
 
@@ -163,4 +163,4 @@ SpotForge is competing in the following categories:
 
 ---
 
-*SpotForge was built with passion for Hacktoberfest 2026. Empower your local neighborhood businesses!*
+*SpotForge was built for Hacktoberfest 2026. Empower your local neighborhood businesses.*
