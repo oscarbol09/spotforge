@@ -102,9 +102,16 @@ class VoiceSynthService:
             )
 
         self._client = ElevenLabs(api_key=self.settings.elevenlabs_api_key)
+        self._cached_voices: list[VoiceInfo] | None = None
+        self._voice_names_map: dict[str, str] = {
+            v.voice_id: v.name for v in CURATED_COMMERCIAL_VOICES
+        }
 
-    def list_voices(self) -> list[VoiceInfo]:
-        """List available voices, merging ElevenLabs API catalog with curated presets."""
+    def list_voices(self, force_refresh: bool = False) -> list[VoiceInfo]:
+        """List available voices, merging ElevenLabs API catalog with curated presets and caching."""
+        if self._cached_voices is not None and not force_refresh:
+            return self._cached_voices
+
         try:
             response = self._client.voices.get_all()
             api_voices = []
@@ -119,11 +126,15 @@ class VoiceSynthService:
                     )
                 )
             if api_voices:
-                return api_voices
+                self._cached_voices = api_voices
+                for v in api_voices:
+                    self._voice_names_map[v.voice_id] = v.name
+                return self._cached_voices
         except Exception as exc:
             logger.warning("Could not fetch remote voices from ElevenLabs: %s. Using curated list.", exc)
 
-        return CURATED_COMMERCIAL_VOICES
+        self._cached_voices = CURATED_COMMERCIAL_VOICES
+        return self._cached_voices
 
     def synthesize_speech(
         self,
@@ -173,12 +184,8 @@ class VoiceSynthService:
 
             relative_url = f"/audio/{output_filename}"
 
-            # Attempt to resolve human-readable voice name
-            voice_name = target_voice
-            for v in self.list_voices():
-                if v.voice_id == target_voice:
-                    voice_name = v.name
-                    break
+            # Fast in-memory lookup of human-readable voice name
+            voice_name = self._voice_names_map.get(target_voice, target_voice)
 
             return AudioFileResult(
                 file_path=target_path,

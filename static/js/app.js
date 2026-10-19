@@ -70,12 +70,12 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     } catch (err) {
       console.warn("Could not load dynamic voices:", err);
-      // Fallback options
+      // Fallback options matching backend CURATED_COMMERCIAL_VOICES
       voiceSelect.innerHTML = `
-        <option value="JBFqnCBsd6RMkjVDRZzb">Rachel — Commercial & Confident</option>
-        <option value="pNInz6obpgDQGcFmaJgB">Adam — Corporate & Warm</option>
-        <option value="ErXwobaYiN019PkySvjV">Antoni — Energetic & Promos</option>
-        <option value="EXAVITQu4vr4xnSDxMaL">Bella — Fresh & Approachable</option>
+        <option value="CwhRBWXzGAHq8TQ4Fs17">Roger — Casual & Resonant</option>
+        <option value="JBFqnCBsd6RMkjVDRZzb">George — Warm & Storyteller</option>
+        <option value="EXAVITQu4vr4xnSDxMaL">Sarah — Professional & Trustworthy</option>
+        <option value="TX3LPaxmHKxFdv7VOQHJ">Liam — Energetic & Dynamic</option>
       `;
     }
   }

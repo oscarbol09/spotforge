@@ -51,6 +51,11 @@ def test_list_voices_curated_or_api(tmp_path):
     assert any(v.voice_id == "test-voice-123" for v in voices)
     assert any(v.name == "Rachel Commercial" for v in voices)
 
+    # Second call must hit memory cache without re-invoking ElevenLabs API
+    voices2 = service.list_voices()
+    assert voices2 == voices
+    mock_client.voices.get_all.assert_called_once()
+
 
 def test_synthesize_speech_successful(tmp_path):
     settings = Settings(

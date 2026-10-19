@@ -185,3 +185,28 @@ def test_post_generate_handles_service_error():
     response = client.post("/api/generate", json=payload)
     assert response.status_code == 502
     assert "Gemma" in response.json()["detail"]
+
+
+def test_post_generate_custom_script_length_limit():
+    """Verify custom_script cannot exceed 1500 chars to protect ElevenLabs quotas."""
+    payload = {
+        "business_name": "Taller López",
+        "business_type": "mecánica",
+        "offer": "Afinación al 50%",
+        "call_to_action": "Agenda hoy",
+        "custom_script": "A" * 1501,
+        "music": False,
+    }
+    response = client.post("/api/generate", json=payload)
+    assert response.status_code == 422
+
+
+def test_get_client_ip_uses_rightmost_forwarded_for():
+    """Verify rightmost IP is extracted from X-Forwarded-For to prevent spoofing."""
+    from app.routes.spots import get_client_ip
+    from unittest.mock import MagicMock
+
+    req = MagicMock()
+    req.headers = {"x-forwarded-for": "198.51.100.1, 203.0.113.195"}
+    assert get_client_ip(req) == "203.0.113.195"
+

@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     rate_limit_enabled: bool = True
     rate_limit_max_requests: int = 5
     rate_limit_window_seconds: int = 300
+    rate_limit_max_global_daily: int = 200
 
     model_config = SettingsConfigDict(
         env_file=".env",

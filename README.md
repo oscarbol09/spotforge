@@ -183,7 +183,7 @@ Open [http://localhost:8000](http://localhost:8000) in your browser.
 ```bash
 pytest -v
 ```
-All 32 tests covering copy generation, duration control, text normalization, voice synthesis, storage TTL lifecycle, rate limiting, and asset serving should pass.
+All 35 tests covering copy generation, duration control, text normalization, voice synthesis, storage TTL lifecycle, rate limiting, and asset serving should pass.
 
 ---
 

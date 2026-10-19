@@ -40,3 +40,17 @@ def test_rate_limiter_isolates_different_ips():
     assert allowed_a1 is True
     assert allowed_a2 is False
     assert allowed_b1 is True
+
+
+def test_rate_limiter_global_daily_ceiling():
+    limiter = SlidingWindowRateLimiter(max_requests=10, window_seconds=60, max_global_daily=2)
+
+    allowed1, _ = limiter.is_allowed("ip-1")
+    allowed2, _ = limiter.is_allowed("ip-2")
+    allowed3, retry_after = limiter.is_allowed("ip-3")
+
+    assert allowed1 is True
+    assert allowed2 is True
+    assert allowed3 is False
+    assert retry_after > 0
+

@@ -25,10 +25,14 @@ _voice_synth_service: VoiceSynthService | None = None
 
 
 def get_client_ip(request: Request) -> str:
-    """Extract client IP, taking proxy headers (X-Forwarded-For) into account."""
+    """Extract client IP, taking proxy headers (X-Forwarded-For) into account safely.
+    
+    Uses the rightmost IP added by the trusted ingress reverse proxy (Render / Cloudflare)
+    to prevent client-side IP spoofing via crafted headers.
+    """
     forwarded = request.headers.get("x-forwarded-for")
     if forwarded:
-        return forwarded.split(",")[0].strip()
+        return forwarded.split(",")[-1].strip()
     if request.client and request.client.host:
         return request.client.host
     return "127.0.0.1"
@@ -51,7 +55,7 @@ def get_voice_synth_service() -> VoiceSynthService:
 
 
 @router.post("", response_model=SpotGenerateResponse)
-async def generate_audio_spot(
+def generate_audio_spot(
     request: SpotGenerateRequest,
     http_request: Request,
     copywriter: CopywriterService = Depends(get_copywriter_service),
@@ -65,6 +69,7 @@ async def generate_audio_spot(
         limiter = get_rate_limiter(
             max_requests=settings.rate_limit_max_requests,
             window_seconds=settings.rate_limit_window_seconds,
+            max_global_daily=settings.rate_limit_max_global_daily,
         )
         allowed, retry_after = limiter.is_allowed(client_ip)
         if not allowed:

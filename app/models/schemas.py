@@ -58,6 +58,7 @@ class SpotGenerateRequest(BaseModel):
     )
     custom_script: str | None = Field(
         default=None,
+        max_length=1500,
         description="Optional manual script to synthesize without Gemma regeneration.",
     )
     music: bool = Field(
