@@ -8,7 +8,7 @@ The success of a broadcast radio spot, Instagram Story, or TikTok ad depends hea
 
 ## Decision
 Integrate the official **ElevenLabs** API utilizing the `eleven_multilingual_v2` model with configurable fallback via `ELEVENLABS_MODEL`.
-- Curated commercial voice talent profiles (Rachel, Adam, Antoni, Bella).
+- Curated commercial voice talent profiles (Roger, George, Sarah, Liam, Charlie, Alice).
 - Dynamic voice name resolution and tuned voice settings (`stability: 0.45`, `similarity_boost: 0.75`).
 - Granular character usage tracking per spot to provide transparent cost telemetry.
 

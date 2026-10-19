@@ -6,6 +6,11 @@ Turn three basic facts about a local business into a broadcast-ready 30-second c
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-green.svg)](https://fastapi.tiangolo.com/)
 [![Model: Gemma 4](https://img.shields.io/badge/Model-Gemma%204%20(Open%20Weights)-orange.svg)](https://ai.google.dev/gemma)
+[![Live Demo](https://img.shields.io/badge/Demo-Render%20Live-purple.svg)](https://spotforge.onrender.com)
+[![DEV.to Submission](https://img.shields.io/badge/DEV.to-Submission%20Post-black.svg)](https://dev.to/oscarbol09/spotforge-3-facts-in-a-broadcast-ready-radio-ad-out-gemma-elevenlabs-1cah)
+
+> 🚀 **Live Deployed App**: [https://spotforge.onrender.com](https://spotforge.onrender.com) *(Hosted on Render free tier; if idle, initial spin-up takes ~50s)*  
+> 📖 **Official Hacktoberfest Submission**: [Read on DEV Community](https://dev.to/oscarbol09/spotforge-3-facts-in-a-broadcast-ready-radio-ad-out-gemma-elevenlabs-1cah)
 
 ---
 

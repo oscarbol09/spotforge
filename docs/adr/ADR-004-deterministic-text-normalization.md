@@ -11,7 +11,7 @@ Implement a deterministic phonetic pre-processing service (`app.services.text_no
 1. Promo multipliers: `2x1` ➔ "dos por uno" (ES) or "two for one" (EN).
 2. Currencies: `$15` ➔ "quince dólares" (ES) or "fifteen dollars" (EN).
 3. Percentages: `30%` ➔ "treinta por ciento" (ES) or "thirty percent" (EN).
-4. Phone numbers: `555-0192` ➔ "cinco, cinco, cinco, cero, uno, nueve, dos" (ES) with comma pauses to induce natural breathing pauses and ensure listener recall.
+4. Phone numbers: `555-0192` ➔ "cinco cinco cinco, cero uno, nueve dos" (ES) with rhythmic cadence groups to induce natural broadcast pauses and ensure listener recall.
 5. Standalone integers: `2026` ➔ "dos mil veintiséis" (ES) or "two thousand and twenty-six" (EN).
 
 ## Consequences
