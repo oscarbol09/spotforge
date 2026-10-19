@@ -12,12 +12,12 @@ cover_image: https://raw.githubusercontent.com/oscarbol09/spotforge/master/docs/
 
 ## What I Built
 
-Every week, millions of small neighborhood businesses—pizzerias, dentists, barbers, auto repair shops, boutiques—struggle to stand out. They know that video stories, Instagram Reels, TikTok ads, and community radio are the fastest ways to drive local foot traffic.
+Every week, millions of neighborhood businesses—pizzerias, barbershops, dental clinics, auto repair shops—struggle to capture local attention. They know that video stories, Instagram Reels, TikTok ads, and community radio are the fastest ways to drive foot traffic.
 
 There is a major barrier: **commercial audio production is prohibitively expensive.**
 
 - **A traditional creative agency** charges between **\$300 and \$800 USD** for a single 30-second commercial script, studio booking, and voice talent.
-- **Freelance digital marketers** managing 5 to 10 local neighborhood clients cannot justify paying hundreds of dollars just to promote a Tuesday pizza discount or a weekend oil change deal.
+- **Freelance digital marketers** managing 5 to 10 local accounts cannot justify spending hundreds of dollars just to promote a Tuesday pizza discount or a weekend oil change deal.
 - **Doing it themselves** results in amateur cellphone voice notes with background noise, hesitant pacing, and weak calls to action that listeners scroll past immediately.
 
 ### The Solution: SpotForge
@@ -37,9 +37,31 @@ Here is what happens under the hood:
 6. **Real MP3 Duration Control**: Accurately measures the physical duration of the MP3 using `mutagen`. If the speech exceeds the target duration by more than 3 seconds, SpotForge automatically applies **1 adaptive retry** with a mathematically reduced word budget.
 7. **FFmpeg Musical Bed Mixing**: Blends the voiceover with a royalty-free CC0 musical track, applying 15% automatic background ducking, infinite track looping, and a smooth 2-second fadeout at the end.
 
+### Side Hustle Economics: Pennies to Produce, 97%+ Gross Margin
+
+Many AI projects claim "$0 cost forever" by glossing over commercial licensing realities. We believe judges and engineers value **honest, real-world economics**:
+
+- **ElevenLabs Free Plan**: Free tier audio does **not** include commercial rights and requires public attribution.
+- **ElevenLabs Starter Plan ($6 USD/month)**: Grants full commercial rights to resell generated audio to paying clients or use in paid advertisements (Instagram Ads, TikTok Ads, radio, Spotify).
+- **SpotForge BYOK Architecture**: Users provide their own API key in `.env`. Commercial rights are cleanly backed by the user's active tier.
+
+#### The Unit Economics Table
+
+| Parameter | Traditional Audio Agency | SpotForge (Starter Plan) |
+|---|---|---|
+| **Copywriting (AIDA script)** | \$150 – \$300 USD | **\$0.00** (Gemma 4 Open-Weights) |
+| **Studio & Voice Talent** | \$150 – \$500 USD | **\$0.08 – \$0.12 USD** (~400 chars) |
+| **Sound Engineering & Music** | \$50 – \$100 USD | **\$0.00** (FFmpeg + CC0 Public Domain Beds) |
+| **Total Production Cost** | **\$350 – \$900 USD** | **\$0.08 – \$0.12 USD** |
+| **Freelancer Resale Price** | \$350 – \$900 USD | **\$5.00 – \$15.00 USD** |
+| **Freelance Gross Margin** | N/A | **97.6% – 99.2%** |
+| **Spots Included in $6/mo** | 0 spots | **~75 spots of 30 seconds** |
+
+**The Side Hustle Playbook**: A solo freelancer offering social media management to local shops can include 2 fresh promo spots per week for an extra \$30/month per client. With just 5 clients, that is **\$150/month in revenue for \$6 in ElevenLabs costs and 30 minutes of total work**—a sustainable, high-margin side hustle.
+
 ---
 
-## Real Audio Demos
+## Demo
 
 Here are three authentic commercial spots generated end-to-end by SpotForge:
 
@@ -56,31 +78,6 @@ Here are three authentic commercial spots generated end-to-end by SpotForge:
 
 > **Apex Auto Repair (36.8s)**:  
 > *"¿Sientes que tu auto ya no responde igual? No arriesgues tu seguridad. En Apex Auto Repair somos especialistas en mecánica multimarca y frenos. Aprovecha hoy un diagnóstico computarizado completo y cambio de aceite sintético... con un treinta por ciento de descuento en tu primera visita. Visítanos en Avenida Central cuatro, cinco, cero... o agenda al cinco, cinco, cinco, siete, seis, cuatro, uno. Apex Auto Repair... Conduce con total tranquilidad."*
-
----
-
-## Side Hustle Economics: Pennies to Produce, 97%+ Gross Margin
-
-Many AI projects claim "$0 cost forever" by glossing over commercial licensing realities. We believe judges and engineers value **honest, real-world economics**:
-
-### Commercial Licensing & BYOK
-- **ElevenLabs Free Plan**: Free tier audio does **not** include commercial rights and requires public attribution.
-- **ElevenLabs Starter Plan ($6 USD/month)**: Grants full commercial rights to resell generated audio to paying clients or use in paid advertisements (Instagram Ads, TikTok Ads, radio, Spotify).
-- **SpotForge BYOK Architecture**: Users provide their own API key in `.env`. Commercial rights are cleanly backed by the user's active tier.
-
-### The Unit Economics Table
-
-| Parameter | Traditional Audio Agency | SpotForge (Starter Plan) |
-|---|---|---|
-| **Copywriting (AIDA script)** | \$150 – \$300 USD | **\$0.00** (Gemma 4 Open-Weights) |
-| **Studio & Voice Talent** | \$150 – \$500 USD | **\$0.08 – \$0.12 USD** (~400 chars) |
-| **Sound Engineering & Music** | \$50 – \$100 USD | **\$0.00** (FFmpeg + CC0 Public Domain Beds) |
-| **Total Production Cost** | **\$350 – \$900 USD** | **\$0.08 – \$0.12 USD** |
-| **Freelancer Resale Price** | \$350 – \$900 USD | **\$5.00 – \$15.00 USD** |
-| **Freelance Gross Margin** | N/A | **97.6% – 99.2%** |
-| **Spots Included in $6/mo** | 0 spots | **~75 spots of 30 seconds** |
-
-**The Side Hustle Playbook**: A solo freelancer offering social media management to local shops can include 2 fresh promo spots per week for an extra \$30/month per client. With just 5 clients, that is **\$150/month in revenue for \$6 in ElevenLabs costs and 30 minutes of total work**—a sustainable, high-margin side hustle.
 
 ---
 
@@ -130,7 +127,7 @@ Raw voiceover sounds like a phone dictation. SpotForge packages 3 curated CC0 pu
 
 ---
 
-## Why Open Innovation Matters
+## Why Does Open Innovation Matter?
 
 Why build this with open-weight models (Gemma) instead of closed proprietary APIs?
 
@@ -141,7 +138,17 @@ Why build this with open-weight models (Gemma) instead of closed proprietary API
 
 ---
 
-## My First User: Testing with a Local Freelancer
+## My Agent Session
+
+SpotForge was designed, tested, and implemented in collaboration with Google Antigravity, employing autonomous pair-programming workflows, Test-Driven Development (TDD), and continuous verification:
+
+- **Formal Architectural Scaffolding**: Decomposed the pipeline into 7 formal Architectural Decision Records (ADRs in `docs/adr/`), isolating open-weight copywriting, deterministic phonetic preprocessing, and audio DSP into deep, decoupled modules.
+- **Test-Driven Rigor (TDD)**: Authored 26 automated contract and unit tests in `pytest` verifying prompt generation, speech cadence mathematics, phonetic regex expansions, and audio synthesis fault tolerance prior to final integration.
+- **Deep Research Subagents**: Deployed background research subagents to audit Gemma 4 single-prompt guidelines on Google AI Studio, verify ElevenLabs Multilingual v2 API quotas, and tune FFmpeg non-blocking audio filtergraphs.
+
+---
+
+## My First User
 
 Before wrapping up the challenge, I tested SpotForge with **Carlos M.**, an independent social media freelancer who manages Instagram accounts and local marketing for 4 neighborhood businesses (a pizzeria, a barber shop, an auto repair shop, and a coffee boutique).
 
@@ -154,7 +161,7 @@ Before wrapping up the challenge, I tested SpotForge with **Carlos M.**, an inde
 
 ## Prize Categories
 
-SpotForge is competing in the following categories:
+SpotForge is entering the following partner categories:
 
 - **Overall Winner ($250 USD)**: A complete, fully functional, production-ready product built specifically for the *Side Hustle* prompt, featuring verifiable unit economics and a clear path to freelance profitability.
 - **Best Use of Gemma ($200 USD)**: Built on **Google Gemma 4** (`gemma-4-26b-a4b-it`) with single-message AIDA prompt architecture, internal thought filtering, speech rate pacing physics, and cloud/Ollama backend interchangeability.
