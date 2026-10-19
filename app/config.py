@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     llm_backend: str = "gemini"  # gemini | ollama
     ollama_base_url: str = "http://localhost:11434"
     elevenlabs_model: str = "eleven_multilingual_v2"
-    default_voice_id: str = "JBFqnCBsd6RMkjVDRZzb"  # Rachel
+    default_voice_id: str = "CwhRBWXzGAHq8TQ4Fs17"  # Roger
     default_language: str = "es"
     port: int = 8000
     host: str = "0.0.0.0"

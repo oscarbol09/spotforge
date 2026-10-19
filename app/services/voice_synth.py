@@ -42,42 +42,49 @@ class AudioFileResult:
     voice_name: str = ""
 
 
-# Curated commercial voices with proven high conversion for radio and digital ads
+# Curated commercial voices verified against ElevenLabs Multilingual v2 catalog
 CURATED_COMMERCIAL_VOICES = [
     VoiceInfo(
-        voice_id="JBFqnCBsd6RMkjVDRZzb",
-        name="Rachel — Comercial & Confidente",
-        category="professional",
-        description="Voz femenina profesional, clara, confiada y persuasiva. Ideal para marcas premium y servicios.",
-        labels={"gender": "female", "accent": "american", "style": "commercial"},
-    ),
-    VoiceInfo(
-        voice_id="pNInz6obpgDQGcFmaJgB",
-        name="Adam — Corporativo & Cálido",
-        category="professional",
-        description="Voz masculina profunda, cálida y autorizada. Perfecta para cuñas radiales y anuncios institucionales.",
-        labels={"gender": "male", "accent": "american", "style": "narration"},
-    ),
-    VoiceInfo(
-        voice_id="ErXwobaYiN019PkySvjV",
-        name="Antoni — Enérgico & Comercial",
+        voice_id="CwhRBWXzGAHq8TQ4Fs17",
+        name="Roger — Casual & Resonante",
         category="commercial",
-        description="Voz masculina dinámica, rápida y llamativa. Excelente para promociones, ofertas flash y comida rápida.",
-        labels={"gender": "male", "accent": "american", "style": "promo"},
+        description="Voz masculina casual, resonante y confiable. Excelente para promociones locales y cuñas de radio.",
+        labels={"gender": "male", "accent": "american", "style": "commercial"},
+    ),
+    VoiceInfo(
+        voice_id="JBFqnCBsd6RMkjVDRZzb",
+        name="George — Cálido & Storyteller",
+        category="professional",
+        description="Voz masculina cálida, cautivadora y narrativa. Ideal para marcas tradicionales, restaurantes y servicios.",
+        labels={"gender": "male", "accent": "british", "style": "storytelling"},
     ),
     VoiceInfo(
         voice_id="EXAVITQu4vr4xnSDxMaL",
-        name="Bella — Fresca & Cercana",
-        category="commercial",
-        description="Voz femenina juvenil, fresca y amigable. Ideal para cafeterías, boutiques y redes sociales.",
-        labels={"gender": "female", "accent": "american", "style": "casual"},
+        name="Sarah — Profesional & Confiable",
+        category="professional",
+        description="Voz femenina madura, clara, tranquilizadora y segura. Perfecta para servicios médicos y finanzas.",
+        labels={"gender": "female", "accent": "american", "style": "narration"},
     ),
     VoiceInfo(
-        voice_id="TxGEqnHWrfWFTfGW9XjX",
-        name="Josh — Amigable & Conversacional",
+        voice_id="TX3LPaxmHKxFdv7VOQHJ",
+        name="Liam — Enérgico & Dinámico",
+        category="commercial",
+        description="Voz masculina joven, enérgica y rápida. Excelente para redes sociales, ofertas flash y comida rápida.",
+        labels={"gender": "male", "accent": "american", "style": "promo"},
+    ),
+    VoiceInfo(
+        voice_id="IKne3meq5aSn9XLyUdCD",
+        name="Charlie — Profundo & Seguro",
+        category="commercial",
+        description="Voz masculina profunda, segura y enérgica. Gran impacto para talleres mecánicos y barberías.",
+        labels={"gender": "male", "accent": "australian", "style": "commercial"},
+    ),
+    VoiceInfo(
+        voice_id="Xb7hH8MSUJpSbSDYk0k2",
+        name="Alice — Clara & Cercana",
         category="conversational",
-        description="Voz masculina joven y natural. Perfecta para testimoniales y recomendaciones directas.",
-        labels={"gender": "male", "accent": "american", "style": "conversational"},
+        description="Voz femenina clara, directa y atractiva. Ideal para tutoriales, cafeterías y boutiques.",
+        labels={"gender": "female", "accent": "british", "style": "conversational"},
     ),
 ]
 

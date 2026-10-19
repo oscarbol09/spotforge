@@ -36,6 +36,12 @@ def test_normalize_currency_prices():
     assert "quince dólares" in normalized
     assert "$15" not in normalized
 
+    # Test deduplication when user already wrote 'dólares'
+    text_dup = "Corte y barba por solo $15 dólares este fin de semana."
+    normalized_dup = normalize_for_tts(text_dup, language="es")
+    assert "quince dólares" in normalized_dup
+    assert "dólares dólares" not in normalized_dup
+
     text_en = "Burgers starting at $10."
     normalized_en = normalize_for_tts(text_en, language="en")
     assert "ten dollars" in normalized_en
@@ -45,12 +51,12 @@ def test_normalize_currency_prices():
 def test_normalize_phone_numbers():
     text = "Llama ya al 555-4321 o escríbenos."
     normalized = normalize_for_tts(text, language="es")
-    assert "cinco, cinco, cinco, cuatro, tres, dos, uno" in normalized
+    assert "cinco cinco cinco, cuatro tres, dos uno" in normalized
     assert "555-4321" not in normalized
 
     text_long = "Comunícate al 555-0199 hoy mismo."
     normalized_long = normalize_for_tts(text_long, language="es")
-    assert "cinco, cinco, cinco, cero, uno, nueve, nueve" in normalized_long
+    assert "cinco cinco cinco, cero uno, nueve nueve" in normalized_long
 
 
 def test_normalize_standalone_numbers():

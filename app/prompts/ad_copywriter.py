@@ -52,8 +52,10 @@ REGLAS ESTRICTAS:
 6. Tono: {tone}.
 7. Idioma: {language_name}.
 8. Sin hashtags, emojis ni formato markdown. Sin comillas dentro del texto.
-9. Escribe TODOS los números, precios y teléfonos con palabras, tal como se dicen en voz alta.
-   Los teléfonos se dicen dígito por dígito con comas entre grupos (ejemplo: 'cinco, cinco, cinco, cero, uno, nueve, nueve').
+9. Escribe números, precios y teléfonos con palabras, tal como se dicen naturalmente en radio:
+   - Precios y ofertas: palabras completas (ejemplo: 'quince dólares', 'treinta por ciento', 'dos por uno').
+   - Direcciones y cantidades: en números naturales (ejemplo: 'Avenida Central cuatrocientos cincuenta').
+   - Teléfonos: en grupos rítmicos memorables (ejemplo: 'cinco cinco cinco, cero uno, nueve dos').
 10. Puntuación estratégica: coma = pausa breve, punto = pausa media, puntos suspensivos = pausa dramática.
 
 Devuelve SOLO el texto del guión, sin explicaciones ni metadatos.

@@ -23,7 +23,7 @@ DEMO_CASES = [
         "tone": "energético",
         "language": "es",
         "duration_seconds": 30,
-        "voice_id": "JBFqnCBsd6RMkjVDRZzb",  # Rachel
+        "voice_id": "JBFqnCBsd6RMkjVDRZzb",  # George
         "music_track": "upbeat_commercial",
         "output_filename": "demo_pizzeria.mp3",
     },
@@ -36,7 +36,7 @@ DEMO_CASES = [
         "tone": "urgente",
         "language": "es",
         "duration_seconds": 30,
-        "voice_id": "ErXwobaYiN019PkySvjV",  # Antoni
+        "voice_id": "TX3LPaxmHKxFdv7VOQHJ",  # Liam
         "music_track": "urban_energy",
         "output_filename": "demo_barber.mp3",
     },
@@ -49,7 +49,7 @@ DEMO_CASES = [
         "tone": "profesional",
         "language": "es",
         "duration_seconds": 30,
-        "voice_id": "pNInz6obpgDQGcFmaJgB",  # Adam
+        "voice_id": "CwhRBWXzGAHq8TQ4Fs17",  # Roger
         "music_track": "chill_acoustic",
         "output_filename": "demo_autorepair.mp3",
     },
@@ -101,7 +101,35 @@ def generate_demos():
             output_filename=temp_voice_filename,
         )
         voice_duration = measure_mp3_duration(voice_result.file_path)
-        print(f"  [Voice] Duration: {voice_duration:.2f}s | Chars used: {voice_result.characters_used}", flush=True)
+        print(f"  [Voice] Talent: {voice_result.voice_name} | Duration: {voice_duration:.2f}s | Chars: {voice_result.characters_used}", flush=True)
+
+        # Adaptive duration pacing retry if duration > 33.0s
+        if voice_duration > case["duration_seconds"] + 3.0:
+            print(f"  [Duration Check] {voice_duration:.2f}s exceeds {case['duration_seconds'] + 3.0}s target bound. Triggering adaptive retry...", flush=True)
+            ratio = (case["duration_seconds"] / voice_duration) * 0.90
+            new_target_words = int(script_result.word_count * ratio)
+            print(f"  [Adaptive Retry] Re-budgeting target to {new_target_words} words...", flush=True)
+            retry_script_res = copywriter.generate_script(
+                business_name=case["business_name"],
+                business_type=case["business_type"],
+                offer=case["offer"],
+                call_to_action=case["call_to_action"],
+                tone=case["tone"],
+                language=case["language"],
+                duration_seconds=case["duration_seconds"],
+                target_words_override=new_target_words,
+            )
+            script = retry_script_res.script
+            normalized_script = normalize_for_tts(script, language=case["language"])
+            if voice_result.file_path.exists():
+                voice_result.file_path.unlink()
+            voice_result = voice_synth.synthesize_speech(
+                text=normalized_script,
+                voice_id=case["voice_id"],
+                output_filename=temp_voice_filename,
+            )
+            voice_duration = measure_mp3_duration(voice_result.file_path)
+            print(f"  [Voice Retry] New duration: {voice_duration:.2f}s | Chars: {voice_result.characters_used}", flush=True)
 
         # 4. FFmpeg Audio Mixer
         final_output_path = output_dir / case["output_filename"]
@@ -117,7 +145,7 @@ def generate_demos():
         final_duration = measure_mp3_duration(final_output_path)
         file_size_kb = final_output_path.stat().st_size / 1024
         print(f"  [SUCCESS] Saved: {final_output_path.as_posix()}", flush=True)
-        print(f"  [STATS] Duration: {final_duration:.2f}s | Size: {file_size_kb:.1f} KB", flush=True)
+        print(f"  [STATS] Real Duration: {final_duration:.2f}s | Size: {file_size_kb:.1f} KB", flush=True)
 
         # Clean up temporary voice file
         if voice_result.file_path.exists():

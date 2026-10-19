@@ -34,12 +34,38 @@ ENGLISH_DIGITS = {
 
 
 def normalize_phone_number(match: re.Match, language: str = "es") -> str:
-    """Convert phone number digits to spaced, comma-separated spoken words."""
+    """Convert phone number digits to natural rhythmically grouped spoken words.
+    
+    Prevents TTS prosodic dead air from commas after every single digit.
+    E.g. 555-0192 becomes 'cinco cinco cinco, cero uno, nueve dos'.
+    """
     raw = match.group(0)
     digits = [c for c in raw if c.isdigit()]
     digit_map = SPANISH_DIGITS if language.startswith("es") else ENGLISH_DIGITS
-    spoken = [digit_map.get(d, d) for d in digits]
-    return ", ".join(spoken)
+    spoken_digits = [digit_map.get(d, d) for d in digits]
+
+    n = len(spoken_digits)
+    if n == 7:
+        chunks = [
+            " ".join(spoken_digits[0:3]),
+            " ".join(spoken_digits[3:5]),
+            " ".join(spoken_digits[5:7]),
+        ]
+    elif n == 10:
+        chunks = [
+            " ".join(spoken_digits[0:3]),
+            " ".join(spoken_digits[3:6]),
+            " ".join(spoken_digits[6:8]),
+            " ".join(spoken_digits[8:10]),
+        ]
+    elif n >= 6:
+        chunks = [" ".join(spoken_digits[0:3])]
+        for i in range(3, n, 2):
+            chunks.append(" ".join(spoken_digits[i : i + 2]))
+    else:
+        chunks = [" ".join(spoken_digits)]
+
+    return ", ".join(chunks)
 
 
 def normalize_promo_multiplier(match: re.Match, language: str = "es") -> str:
@@ -63,7 +89,7 @@ def normalize_percentage(match: re.Match, language: str = "es") -> str:
 
 
 def normalize_currency(match: re.Match, language: str = "es") -> str:
-    """Normalize '$15' to 'quince dólares' or '$500'."""
+    """Normalize '$15' or '$15 dólares' to 'quince dólares' without duplication."""
     num_str = match.group(1).replace(",", "")
     lang = "es" if language.startswith("es") else "en"
     try:
@@ -105,11 +131,13 @@ def normalize_for_tts(text: str, language: str = "es") -> str:
         result,
     )
 
-    # 3. Normalize currency: $15, $500, $ 20
+    # 3. Normalize currency: $15, $500, $ 20, $15 dólares, $15 USD (consumes redundant unit words)
+    currency_pattern = r"\$\s*(\d+(?:[.,]\d+)?)(?:\s*(?:dólares|dolares|dollars|usd))?"
     result = re.sub(
-        r"\$\s*(\d+(?:[.,]\d+)?)",
+        currency_pattern,
         lambda m: normalize_currency(m, lang),
         result,
+        flags=re.IGNORECASE,
     )
 
     # 4. Normalize phone numbers: e.g. 555-0199, 555-4321, 555 1234, (555) 123-4567

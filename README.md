@@ -33,9 +33,9 @@ Three sample spots produced end-to-end with the pipeline (Gemma 4 + Phonetic Nor
 
 | Business | Category | Voice Talent | Music Bed | Real Duration | Audio File |
 |---|---|---|---|---|---|
-| **Pizzería Don Mario** | Wood-fired artisanal Italian pizzeria | Rachel | Upbeat Commercial (110 BPM) | **28.4s** | [`demo_pizzeria.mp3`](static/audio/demo_pizzeria.mp3) |
-| **Barbería El Bigote** | Executive men's grooming & hot towel | Antoni | Urban Energy (120 BPM) | **35.0s** | [`demo_barber.mp3`](static/audio/demo_barber.mp3) |
-| **Apex Auto Repair** | Multi-brand automotive mechanics & brakes | Adam | Chill Acoustic (75 BPM) | **36.8s** | [`demo_autorepair.mp3`](static/audio/demo_autorepair.mp3) |
+| **Pizzería Don Mario** | Wood-fired artisanal Italian pizzeria | George | Upbeat Commercial (110 BPM) | **28.4s** | [`demo_pizzeria.mp3`](static/audio/demo_pizzeria.mp3) |
+| **Barbería El Bigote** | Executive men's grooming & hot towel | Liam | Urban Energy (120 BPM) | **31.9s** | [`demo_barber.mp3`](static/audio/demo_barber.mp3) |
+| **Apex Auto Repair** | Multi-brand automotive mechanics & brakes | Roger | Chill Acoustic (75 BPM) | **27.3s** | [`demo_autorepair.mp3`](static/audio/demo_autorepair.mp3) |
 
 ---
 
@@ -71,7 +71,7 @@ Many AI projects claim "$0 cost" by glossing over third-party licensing. Commerc
 flowchart TD
     A["Business Input\n(Name, Offer, CTA, Tone)"] --> B["Gemma 4 Copywriter\n(Single-prompt AIDA)"]
     B --> C["Phonetic Normalizer\n(2x1 -> two for one, $15 -> fifteen dollars)"]
-    C --> D["ElevenLabs Voice\n(Multilingual v2 - Rachel, Adam, Antoni, Bella)"]
+    C --> D["ElevenLabs Voice\n(Multilingual v2 - Roger, George, Sarah, Liam)"]
     D --> E["Duration Measurement\n(Mutagen binary MP3 audit)"]
     E -- "Exceeds target + 3s?" --> F["Adaptive 1-Retry Loop\n(Proportional word-budget reduction)"]
     F -.-> C
